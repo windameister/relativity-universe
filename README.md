@@ -10,7 +10,7 @@
 - 当前代码怎么工作：[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - 事件库设计（P1 已落地）：[`docs/EVENT_LIBRARY_DESIGN.md`](docs/EVENT_LIBRARY_DESIGN.md)
 
-本仓库是本地 git 仓库，没有配置远程，也不需要推送。
+目前只维护本地仓库，打磨完成前先不发布。以后如果公开，加上远程再推即可。仓库里没有密钥或私人账号信息。
 
 ## 现在能玩什么
 
