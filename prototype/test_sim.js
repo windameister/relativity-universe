@@ -85,3 +85,11 @@ console.log('\n150 个宇宙 × 10 趟 接触统计:', JSON.stringify(stats));
  if(!(conv&&warp&&stay)) throw new Error('escape check failed');
  // 死后不能再行动
  const t0=u.time; SIM.travel(u,3,'w0.999'); if(u.time!==t0) throw new Error('acted after death');}
+// 武器也不能超光速：光粒 / 二向箔的飞行时间 ≥ 发射处到目标的距离（c = 1）；文明发射的从 fromSys 算，歌者从它的巡航位置算
+{let n=0,bad=0,rehit=0;for(let k=0;k<30;k++){const u=SIM.createUniverse('W'+k);SIM.simulateTo(u,6000);u.strikes.forEach(st=>{n++;const T=u.systems[st.target];const d=st.by==='singer'?SIM.singerDist(u,T):u.D[st.fromSys][st.target];if(st.arrive-st.launch<d-1e-9)bad++;});u.systems.forEach(s=>{if(u.strikes.filter(st=>st.target===s.id&&st.type==='光粒'&&!st.wasted).length>1)rehit++;});}
+ console.log('weapon FTL check: '+n+' strikes, violations '+bad+'；同一星系被光粒击中≥2次 '+rehit); if(bad) throw new Error('weapon FTL'); if(rehit) throw new Error('photoid re-hit (A4)');}
+// 命运（B4）：选择不消耗随机数；结局只交付一次；死后落空
+{const u=SIM.createUniverse('dst1');SIM.remember(u,0);const rs=u.rs;const D=SIM.chooseDestiny(u,'earth');if(!D||u.rs!==rs)throw new Error('destiny consumed RNG');
+ let ends=0;for(let i=0;i<40&&!u.ship.dead;i++){const r=SIM.hibernate(u,300);if(r.report.ending)ends++;if(!r.report.destiny)throw new Error('no destiny in report');}
+ if(ends>1)throw new Error('ending delivered twice'); const st=SIM.destinyOf(u).state; if(st==='active'&&u.ship.dead)throw new Error('destiny still active after death');
+ console.log('destiny ok: earth → '+st+(SIM.destinyOf(u).ending?'：'+SIM.destinyOf(u).ending.text.slice(0,40)+'…':''));}

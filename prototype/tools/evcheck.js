@@ -24,8 +24,8 @@ else {
 const ONS = ['year', 'pending', 'arrival', 'recognize', 'report', 'choice'];
 const CONDS = ['fact', 'noFact', 'stat', 'temper', 'earth', 'alive', 'rel', 'any', 'all', 'not', 'since', 'flag', 'noflag', 'homeSeen', 'shipKnows', 'near', 'here', 'tier', 'scene', 'diaspora', 'reach', 'atWar', 'bind', 'calc'];
 const COND_AUX = ['gte', 'lte', 'gt', 'lt', 'eq', 'ne', 'is'];
-const OPS = ['add', 'set', 'expo', 'imprint', 'ship', 'rel', 'strike', 'protect', 'refugees', 'forbid', 'leak', 'pass', 'silence', 'evacuate'];
-const CALCS = ['help', 'why', 'archive', 'expo', 'home', 'age', 'dist', 'incoming'];
+const OPS = ['add', 'set', 'expo', 'imprint', 'ship', 'rel', 'strike', 'protect', 'refugees', 'forbid', 'leak', 'pass', 'silence', 'evacuate', 'hunt', 'seal'];
+const CALCS = ['help', 'why', 'archive', 'expo', 'home', 'age', 'dist', 'incoming', 'dim', 'faith', 'dossier', 'destiny'];
 const CALC_BIND = { help: ['h'], why: ['h'], archive: ['h'] };
 const SLOTS = ['civ', 'other', 'ship', 'shipBase', 'religion', 'sect0', 'sect1', 'ritual', 'home', 'here', 'year', 'cHome', 'oHome', 'istar', 'dist'];
 const FSUB = /^(y|n|civ|actor|sys|them|who|act|d\.[a-zA-Z0-9_]+)$/;
@@ -41,7 +41,7 @@ SIM_FACTS.concat(PLAYER_FACTS).forEach(t => addEmit(t, '(sim)'));
 const texts = e => {   // [where, string]
   const out = [], T = e.text || {};
   Object.keys(T).forEach(k => [].concat(T[k]).forEach(s => out.push([k, s])));
-  if (e.card) { out.push(['card.title', e.card.title]); out.push(['card.body', e.card.body]); }
+  if (e.card) { out.push(['card.title', e.card.title]); out.push(['card.body', e.card.body]); if (e.card.short) out.push(['card.short', e.card.short]); }
   (e.outcomes || []).forEach((o, i) => { ['log', 'result'].forEach(k => [].concat(o[k] || []).forEach(s => out.push(['outcome' + i + '.' + k, s]))); if (o.card) { out.push(['outcome' + i + '.card', o.card.title]); out.push(['outcome' + i + '.card', o.card.body]); } });
   (e.options || []).forEach(o => { if (o.label) out.push(['option', o.label]); if (o.desc) out.push(['option', o.desc]); });
   return out;
@@ -66,6 +66,9 @@ E.forEach(e => {
   const binds = ownBinds(e);   // f = 触发史实
   if (e.on === 'choice' && parentBinds[e.id]) { const ps = parentBinds[e.id]; ps[0].forEach(x => { if (ps.every(q => q.has(x))) binds.add(x); }); }
   const allConds = [].concat(e.when || []);
+  (e.mod || []).forEach(m => allConds.push(m.if));
+  (e.outcomes || []).forEach(o => (o.mod || []).forEach(m => allConds.push(m.if)));
+  (e.options || []).forEach(o => (o.when || []).forEach(c => allConds.push(c)));
   (e.outcomes || []).forEach(o => (o.when || []).forEach(c => allConds.push(c)));
   walkConds(allConds, cd => {
     const keys = Object.keys(cd).filter(k => !COND_AUX.includes(k));
@@ -104,7 +107,11 @@ E.forEach(e => {
   if (e.on === 'pending' && !unlocked[e.id]) ERR(e.id + ': pending 事件没有任何 unlock 指向它（死事件）');
   if (e.on === 'choice' && !referencedChoice[e.id]) ERR(e.id + ': choice 事件没有被任何选项引用（死事件）');
 });
-const sinks = Object.keys(emitted).filter(t => !factUsed[t] && !SIM_FACTS.concat(PLAYER_FACTS).includes(t));   // 终点史实：只作记录（时间线 / 计数 / 后续扩展），不是错误
+// 终点史实：写入后没有事件再读取。RECORD 里的是「故意只作记录」（结局本身、或由代码读取），其余才需要补后续
+const RECORD = { echo_gs2: '回响终章：以你命名的天文台本身就是结局', echo_gl3: '回响终章：武器或争论本身就是结局（两者互斥）', fleet_met: '报恩舰队见面后再无下文是故意的（400 年舰队冷却已由 cooldownGroup 处理）',
+  pilgrim_met: '由 rel.pilgrim_scene / rel.return 的 noFact 读取', faith_met: '由 payoff.gratitude_fleet 的 noFact 读取', sealed_in: '命运「加入黑域」的结局本身（之后飞船不再行动）' };
+const sinksAll = Object.keys(emitted).filter(t => !factUsed[t] && !SIM_FACTS.concat(PLAYER_FACTS).includes(t));
+const sinks = sinksAll.filter(t => !RECORD[t]), records = sinksAll.filter(t => RECORD[t]);
 
 // ---------- 2. 可达性：从根触发出发，沿 emit → fact 条件/触发、unlock、选项 传播 ----------
 const ROOTS = new Set(SIM_FACTS.concat(PLAYER_FACTS));
@@ -136,7 +143,8 @@ const maxStatic = Math.max.apply(null, E.map(e => depth(e.id, new Set())));
 console.log('== 事件库：' + E.length + ' 个事件，' + Object.keys(emitted).length + ' 种史实；静态可达 ' + reach.size + '/' + E.length + '；最长静态链 ' + maxStatic + ' 层');
 console.log('== 静态检查：' + errs.length + ' 个错误，' + warns.length + ' 个警告');
 errs.forEach(x => console.log('  ERROR ' + x)); warns.forEach(x => console.log('  warn  ' + x));
-console.log('  info  终点史实（写入后没有事件再读取，留作记录/后续扩展）' + sinks.length + ' 种：' + sinks.join(' '));
+console.log('  info  终点史实（写入后没有事件再读取，待补后续）' + sinks.length + ' 种：' + (sinks.join(' ') || '无'));
+console.log('  info  标注为纯记录 ' + records.length + ' 种：' + records.map(t => t + '（' + RECORD[t] + '）').join('；'));
 if (args.includes('--static')) process.exit(errs.length ? 1 : 0);
 
 // ---------- 3. 覆盖率：5 种玩法 × N/5 个种子 ----------
@@ -150,6 +158,7 @@ for (let k = 0; k < N; k++) {
   const style = STYLES[k % STYLES.length], seed = 'ev' + Math.floor(k / STYLES.length) + style[0];
   let rs = 1 + k * 7919; const r = () => (rs = (rs * 16807) % 2147483647) / 2147483647;
   const u = SIM.createUniverse(seed); SIM.remember(u, 0);
+  if (SIM.chooseDestiny) SIM.chooseDestiny(u, ['zero', 'singer', 'earth', 'domain'][k % 4]);   // 命运不消耗随机数；只有「加入黑域」会解锁一个选项
   for (let i = 0; i < 12 && !u.ship.dead; i++) {
     let res;
     if (style === 'sleeper' && i % 3 === 2) res = SIM.hibernate(u, [300, 500, 1000][i % 3]);
@@ -185,7 +194,10 @@ for (let k = 0; k < N; k++) {
   mine.forEach(t => allTexts.push(t));
   if (mine.length >= 2) { const TT = new Set(mine.map(norm)); runRep.push(1 - TT.size / mine.length); }
 }
-const never = E.filter(e => !fired[e.id]).map(e => e.id);
+// 故意稀有：前置本身就很长（长局 / 选了命运 / 多步链），300 局 × 12 站不出现不算问题；用 tools/findtale 一类的定向玩法能见到
+const RARE = { 'card.lowdim': '宇宙降维 15 次，只在很长的局里出现', 'destiny.domain': '只有选了命运「加入黑域」、凝视过二维画、遇到科技≥100 的友好文明才出现', 'destiny.seal': '同上',
+  'echo.mediated.memorial': '调停成功（本身就少）30 年后', 'rel.stop_war': '要有以你为名的圣战，并且你回访', 'rel.expose': '回访假先知场景时二选一', 'rel.endorse': '同上' };
+const neverAll = E.filter(e => !fired[e.id]).map(e => e.id), never = neverAll.filter(id => !RARE[id]), rareNever = neverAll.filter(id => RARE[id]);
 const noisy = Object.keys(perRunMax).filter(id => perRunMax[id] > 5 && !(byId[id] && byId[id].nocap)).map(id => id + '(单局最多 ' + perRunMax[id] + ')');
 const T = new Set(allTexts.map(norm)); const rep = 1 - T.size / Math.max(1, allTexts.length);
 console.log('\n== 覆盖率：' + runs + ' 局（' + STYLES.join(' / ') + '，每局 12 站 + 再推 500 年）');
@@ -193,6 +205,7 @@ console.log('  触发过的事件 ' + (E.length - never.length) + '/' + E.length
 Object.keys(styleStats).forEach(s => console.log('    ' + s + '：每局 ' + (styleStats[s].ev / styleStats[s].runs).toFixed(1) + ' 次事件'));
 console.log('  史实因果链：单局最深 ' + maxChain + ' 层，平均最深 ' + (chainSum / runs).toFixed(1) + ' 层');
 console.log('  从未触发（' + never.length + '）：' + (never.join(', ') || '无'));
+console.log('  故意稀有、本次未出现（' + rareNever.length + '）：' + (rareNever.map(id => id + '（' + RARE[id] + '）').join('；') || '无'));
 console.log('  单局触发 >5 次（' + noisy.length + '）：' + (noisy.join(', ') || '无'));
 console.log('  文本重复度（回响+卡片，去专名和数字后）：单局内 ' + (100 * runRep.reduce((a, b) => a + b, 0) / Math.max(1, runRep.length)).toFixed(1) + '%（同一局里读到同一句模板的比例）；跨 ' + runs + ' 局共 ' + allTexts.length + ' 条 / ' + T.size + ' 种不同句子');
 const top = Object.entries(fired).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([id, n]) => id + ' ' + n);

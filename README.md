@@ -1,89 +1,75 @@
-# 相对论宇宙
+# 相对论宇宙 · Relativity Universe
 
-程序化生成的星系尺度沙盒。你驾驶一艘飞船在近乎真实的相对论时空里旅行：曲率驱动可以把船上时间压到极短，外面已经过了几个世纪。你离开过的文明会继续演化，也可能因为你留下的航迹、星图或礼物，被黑暗森林里的清理者盯上。
+> **你离开的每一秒，宇宙都在老去。**
 
-这是一份**可玩的网页原型**归档，供在本机用更强的模型做正式版时接手。正式版的目标是：更好玩，画面更逼真、更震撼。当前原型还不是那个版本。
+一个遵守真实相对论（光速上限、洛伦兹时间膨胀、光行差与多普勒频移、光延迟）与《三体》宇宙法则（黑暗森林、歌者清理、光粒、二向箔降维、黑域）的 3D 网页宇宙沙盒。
 
-- 需求与硬规则：[`docs/01-REQUIREMENTS.md`](docs/01-REQUIREMENTS.md)
-- 到目前为止的迭代：[`docs/02-ITERATION-HISTORY.md`](docs/02-ITERATION-HISTORY.md)
-- 已知问题和下一步：[`docs/03-ROADMAP.md`](docs/03-ROADMAP.md)
-- 当前代码怎么工作：[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- 事件库设计（P1 已落地）：[`docs/EVENT_LIBRARY_DESIGN.md`](docs/EVENT_LIBRARY_DESIGN.md)
+**在线试玩（GitHub Pages）：** <https://windameister.github.io/relativity-universe/>
 
-目前只维护本地仓库，打磨完成前先不发布。以后如果公开，加上远程再推即可。仓库里没有密钥或私人账号信息。
+### 直达视觉奇观
 
-## 现在能玩什么
+- 🌌 **完整体验（开场 → 星图 → 航行）**：<https://windameister.github.io/relativity-universe/>
+- 🛸 **第一视角 0.99999c 曲率航行**（光行差 + 多普勒 + 宇宙微波背景蓝移）：<https://windameister.github.io/relativity-universe/game/?scene=warp>
+- 📄 **二向箔吞没太阳系**（地球视角终局）：<https://windameister.github.io/relativity-universe/game/?scene=foil>
+- 🕳️ **星系全息图 & 史瓦西黑洞 & 10 万光年银河拉远**：<https://windameister.github.io/relativity-universe/game/?scene=galaxy>
 
-- **2D 原型** `prototype/index.html`：完整模拟 + 交互。地图是俯视银盘局部，带光延迟。
-- **3D 原型** `prototype/index3d.html`：同一套模拟，用 Three.js 画恒星、星云、曲率航迹、光粒冲击和二向箔扩张，离开期间会做时间压缩回放。
-- **事件库第一阶段**：90 个事件写成数据，回响、间接因果、盟友变屠夫、母星成猎手、流亡者认人、宗教分叉，都已经能在游戏里触发。
+---
 
-截图在 `assets/screenshots/`。试玩报告和关键瞬间在 `playtest/`。
+## 画面一览
 
-## 怎么运行
+| 地球日出与银河开场 | 0.99999c 曲率巡航（1219K 宇宙微波背景蓝移） |
+|---|---|
+| ![地球日出](assets/showcase/01-title-sunrise.png) | ![曲率巡航](assets/showcase/04-warp-cmb.png) |
 
-不需要安装依赖，也不需要构建。用浏览器打开 HTML 即可。
+| 二向箔吞没土星（光环铺开成同心条纹） | 地球地表仰望：二维平面横跨整个天空 |
+|---|---|
+| ![二向箔土星](assets/showcase/06-foil-saturn.png) | ![地球仰望二维平面](assets/showcase/07-foil-sky.png) |
 
-推荐用一个本地静态服务器，避免个别浏览器限制 `file://`：
+| 史瓦西黑洞双引力拱弧 | 上帝视角回放：光球扫到飞船「这一刻，你才看到」 |
+|---|---|
+| ![黑洞引力透镜](assets/showcase/10-galaxy-blackhole.png) | ![光延迟回放](assets/showcase/12-galaxy-lightdelay.png) |
+
+| 滚轮拉远至 10 万光年银河系 | 一键生成分享海报与复现链接 |
+|---|---|
+| ![银河拉远](assets/showcase/11-galaxy-zoom.png) | ![分享海报](assets/showcase/13-share-poster.png) |
+
+---
+
+## 物理硬规则
+
+1. **没有东西能超光速**：任何航行、武器、信号，外部时间永远满足 $t_{\mathrm{ext}} \ge d / c$。
+2. **曲率驱动不超光速**：遵循《三体》设定，曲率驱动只是将飞船瞬间推到无限接近 $c$（0.999c / 0.9999c / 0.99999c），船上固有时由真实洛伦兹因子 $\gamma = 1 / \sqrt{1-\beta^2}$ 压缩；代价是在出发地与目的地留下长久可见的曲率航迹，暴露坐标。
+3. **常规推进接近不了光速**：上限 0.03c，$\gamma \approx 1$，一趟动辄数千年，舰员必须全程冬眠。
+4. **光延迟是世界规则**：距离 $d$ 光年的恒星，你默认只能看到 $d$ 年前的样子。等你飞过去，或许早已物是人非。
+5. **黑暗森林与由历史驱动的 101 个事件**：你的礼物、技术、星图、假扮神明或广播坐标，都会在几百年后长出可追溯的回响——盟友变成屠夫、母星成为猎手、流亡舰队认出你的飞船、以你之名的宗教改革或圣战，或者歌者顺着你的曲率航迹随手扔来一片二向箔。
+
+---
+
+## 本地运行与构建
+
+不需要安装任何前端依赖，纯静态 HTML + Three.js + WebGL GLSL + WebAudio 程序化音频。
+
+```bash
+# 本地静态服务
+python3 -m http.server 8765
+# 打开 http://127.0.0.1:8765/game/
+```
+
+也可以直接双击打开单文件打包版 `game/dist/relativity-universe.html`。
+
+### 仓库结构
+
+- `game/` — 3D 正式版客户端（Three.js r187 + 自定义 GLSL 着色器 + WebAudio 程序化音效）
+  - `game/build.py` — 从 `prototype/index.html` 抽取模拟内核生成 `game/gen/sim.js`，并打包单文件版 `game/dist/relativity-universe.html`
+- `prototype/` — 模拟内核（确定性数学 + 惰性求值 + 光延迟 + 101 事件库）与 2D/3D 原型
+- `docs/` — [需求与硬规则](docs/01-REQUIREMENTS.md)、[迭代历史](docs/02-ITERATION-HISTORY.md)、[路线图](docs/03-ROADMAP.md)、[架构文档](docs/ARCHITECTURE.md)、[事件库设计](docs/EVENT_LIBRARY_DESIGN.md)
+- `playtest/` — 试玩报告与统计脚本
+- `assets/showcase/` — 高清展示截图
+
+### 回归测试
 
 ```bash
 cd prototype
-python3 -m http.server 8765
+node tools/evcheck.js --static   # 101 个事件静态可达性检查
+node test_sim.js                 # 物理硬规则、不超光速、确定性与 150 局冒烟测试
 ```
-
-然后打开：
-
-- 2D：<http://127.0.0.1:8765/index.html>
-- 3D：<http://127.0.0.1:8765/index3d.html>
-
-也可以直接把 `prototype/index.html` 或 `prototype/index3d.html` 拖进浏览器。
-
-常用 URL 参数：
-
-| 参数 | 作用 |
-|---|---|
-| `?seed=dip7` | 指定宇宙种子，同一种子 + 同样操作 = 同样历史 |
-| `&plan=6:w0.9999:贸易,h:50` | 自动按计划旅行 / 冬眠 / 选选项（见架构文档） |
-| `&replay=0` | 3D 跳过回放 |
-| `&godView` 或页面上的「上帝视角」 | 显示真实现状、歌者和在途武器（默认你只看到光已经传到的样子） |
-
-改事件库之后，在 `prototype/` 目录执行：
-
-```bash
-node events/events_src.js          # 把 90 个事件嵌进 index.html
-python3 src3d/build.py             # 用更新后的模拟重生成 index3d.html
-node tools/evcheck.js --static     # 静态检查
-node test_sim.js                   # 物理自检 + 确定性 + 150 局冒烟
-```
-
-统计脚本在仓库根目录运行，例如 `node playtest/echo_stats.js`。细节见 `playtest/README.md` 和 `docs/ARCHITECTURE.md`。
-
-## 仓库结构
-
-```
-README.md
-docs/                  需求、迭代史、路线图、架构、事件库设计
-prototype/             可玩原型（2D / 3D 都是单文件 HTML）
-  index.html           2D，内含模拟内核 + 事件 JSON
-  index3d.html         由 src3d/build.py 从 index.html 生成，不要手改
-  events/events_src.js 事件库源（改这里，再嵌回去）
-  tools/               evcheck / plan / simload / facthash
-  src3d/               3D 场景源（g3d.js）和 three.js 包
-  test_sim.js          无界面回归
-playtest/              玩家视角试玩报告、统计脚本、代表性截图
-assets/screenshots/    2D / 3D 展示图
-```
-
-没有把试玩过程中所有重复截图都收进来，只留报告里引用的和能说明问题的那些。
-
-## 给下一个模型的入口
-
-1. 先读 `docs/01-REQUIREMENTS.md` 里的硬规则。尤其是：曲率驱动**不能超光速**，只是把飞船推到无限接近 c；时间膨胀必须走真实的洛伦兹因子；常规推进无论什么能源都不可能接近 c。
-2. 再读 `docs/ARCHITECTURE.md`，弄清模拟内核、惰性求值、光延迟、史实库和事件库怎么分开。
-3. 用上面的命令跑通 `test_sim.js` 和 `evcheck.js --static`，再打开 3D 页亲手玩一局。
-4. 已知缺陷和「正式版」的建议架构在 `docs/03-ROADMAP.md`。那些架构选项是建议，由发起人决定。
-5. 改玩法或事件时，优先改 `events/events_src.js` 或模拟内核，再 `build.py` 生成 3D，不要直接编辑 `index3d.html`。
-
-## 当前版本的位置
-
-事件库第一阶段已经让故事能对上玩家早先的选择，例如：假扮神明的文明会走到伪先知和圣战，却仍可能被歌者顺着你的曲率航迹抹掉。接下来最急的是：宗教线太单一、大事件卡片偏多、约 10 个事件在 300 局测试里从未触发，然后才是补给经济和 3D 回放节奏。这些都不妨碍把本仓库当作正式版的起点。

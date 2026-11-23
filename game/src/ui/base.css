@@ -1,0 +1,35 @@
+/* 基础样式（core，所有场景共享）。界面细节写在 ui.css。 */
+:root {
+  --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --fg: #e8ecf6;
+  --dim: #8a93ab;
+  --faint: #4d5670;
+  --acc: #8fd3ff;
+  --gold: #f3d58a;
+  --warn: #ffb35c;
+  --bad: #ff6b6b;
+  --good: #7dffa8;
+  --glass: rgba(8, 11, 20, 0.55);
+  --line: rgba(160, 190, 255, 0.16);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; color: var(--fg); font-family: var(--sans); overflow: hidden; -webkit-font-smoothing: antialiased; }
+#gl { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; outline: none; z-index: 0; }
+#ui { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+#ui > * { pointer-events: auto; }
+#ui .passthrough, #ui .passthrough * { pointer-events: none; }
+#fade { position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: 50; transition: opacity 0.8s ease; }
+#fade.white { background: #fff; }
+#errors { position: fixed; left: 8px; bottom: 8px; z-index: 99; font: 11px var(--mono); color: #f88; white-space: pre-wrap; max-width: 60vw; pointer-events: none; }
+button { font-family: inherit; }
+/* 电影式字幕：任何场景都可以用 */
+.cine-title { font-family: var(--serif); font-weight: 400; letter-spacing: 0.35em; color: #fff; text-shadow: 0 0 24px rgba(140, 190, 255, 0.35); }
+.cine-line { font-family: var(--serif); font-size: clamp(16px, 2.1vw, 26px); letter-spacing: 0.12em; color: rgba(235, 240, 255, 0.92); text-shadow: 0 0 12px rgba(0, 0, 0, 0.9); }
+.cine-small { font-family: var(--sans); font-size: 12px; letter-spacing: 0.25em; color: var(--dim); text-transform: uppercase; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.fade-in { animation: ruFadeIn 1.2s ease both; }
+.fade-out { animation: ruFadeOut 0.8s ease both; }
+@keyframes ruFadeIn { from { opacity: 0; transform: translateY(6px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes ruFadeOut { from { opacity: 1; } to { opacity: 0; } }

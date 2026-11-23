@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>相对论宇宙 · Relativity Universe</title>
+<meta name="description" content="你离开的每一秒，宇宙都在老去。一个遵守光速、洛伦兹因子与黑暗森林法则的宇宙。">
+<link rel="stylesheet" href="src/ui/base.css">
+<link rel="stylesheet" href="src/ui/ui.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="ui"></div>
+<div id="fade"></div>
+<div id="errors"></div>
+
+<!-- 第三方：three.js r187 + OrbitControls / EffectComposer / RenderPass / UnrealBloomPass / OutputPass / ShaderPass -->
+<script src="vendor/three.bundle.js"></script>
+<!-- 模拟内核 + 事件库（build.py 从 prototype/index.html 生成） -->
+<script src="gen/sim.js"></script>
+<!-- 核心 -->
+<script src="src/core/util.js"></script>
+<script src="src/core/glsl.js"></script>
+<script src="src/core/engine.js"></script>
+<script src="src/core/audio.js"></script>
+<!-- 共享视觉 -->
+<script src="src/fx/sky.js"></script>
+<script src="src/fx/planets.js"></script>
+<script src="src/fx/blackhole.js"></script>
+<!-- 场景 -->
+<script src="src/scenes/title.js"></script>
+<script src="src/scenes/galaxy.js"></script>
+<script src="src/scenes/warp.js"></script>
+<script src="src/scenes/foil.js"></script>
+<!-- 界面与流程 -->
+<script src="src/ui/ui.js"></script>
+<script src="src/ui/share.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>

@@ -140,70 +140,81 @@
 {"id":"echo.told.home","on":"year","need":["told"],"when":[{"fact":{"type":"told","target":"$c","actor":"ship","as":"t"}},{"since":{"as":"t","min":20}},{"earth":"$c"}],"p":0.015,"once":"subject","echo":true,"text":{"log":["「{civ}」的孩子们还在读{t.y}那本《{ship}航行记》。","「{civ}」的星图上，你{t.y}带回的那些星系都标着一个小小的船形记号。"]}},
 {"id":"echo.enabled_gift","on":"fact:cleared","subject":"actor","when":[{"bind":{"as":"h","from":"f.data.help"}},{"any":[{"stat":"h.type","eq":"gift_l"},{"stat":"h.type","eq":"gift_s"}]},{"noFact":{"type":"butcher","target":"$c","maxAge":0}}],"echo":true,"nocap":true,"imp":3,"text":{"log":["你{h.n} 年给的{h.d.what}让「{civ}」在{istar}进入星海；{f.y}，他们[的深空监听网发现了|盯上了]「{f.d.victim}」，随即清理了它。","「{civ}」清理了「{f.d.victim}」（{f.y}）。他们能走到这一步，起点是{h.y}你留下的{h.d.what}。"]}},
 {"id":"echo.enabled_bond","on":"fact:cleared","subject":"actor","when":[{"bind":{"as":"h","from":"f.data.help"}},{"not":{"any":[{"stat":"h.type","eq":"gift_l"},{"stat":"h.type","eq":"gift_s"}]}},{"noFact":{"type":"butcher","target":"$c","maxAge":0}}],"echo":true,"nocap":true,"imp":3,"text":{"log":["{h.y}你曾{h.act}，让「{civ}」更快地强大起来；{f.y}，他们清理了「{f.d.victim}」。","「{civ}」的深空监听网在{f.y}发现了「{f.d.victim}」，然后把它抹掉了。{h.y}，你曾{h.act}。"]}},
-{"id":"ally.butcher","on":"fact:cleared","subject":"actor","when":[{"fact":{"type":["ally","trade","teach"],"target":"$c","actor":"ship","known":"any","as":"h"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"forbid":["echo.ally.berth","echo.ally.festival","echo.trade.prosper","echo.teach.institute"],"emit":{"type":"butcher","data":{"victim":"{f.d.victim}","what":"他们向「{f.d.victim}」射出了光粒"}},"text":{"log":["「{civ}」清理了「{f.d.victim}」。{h.y}你曾{h.act}；如今，他们也成了黑暗森林里的猎手。{v.why}","{f.y}，「{civ}」向「{f.d.victim}」射出了光粒。你还记得{h.y}{h.act}时的样子。{v.why}"]},"pre":[{"calc":"why"}],"card":{"cls":"bad","title":"你的{h.d.rel}伙伴成了屠夫：「{civ}」","body":"你看到的是{f.y}的光：「{civ}」清理了「{f.d.victim}」。{h.y}，你曾{h.act}。{v.why}"}},
-{"id":"ally.war_home","on":"fact:war","subject":"either","when":[{"earth":"$o"},{"earth":"$c","is":false},{"fact":{"type":["ally","trade"],"target":"$c","actor":"ship","known":"any","as":"h"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"forbid":["echo.ally.berth","echo.ally.festival","echo.trade.prosper","echo.teach.institute"],"emit":{"type":"ally_war","data":{"other":"{other}","what":"他们向「{other}」开战"}},"text":{"log":["「{civ}」与「{other}」开战了。{h.y}你替他们和母星牵起的{h.d.rel}之约，没能挡住这场战争。","{f.y}，「{civ}」的舰队驶向太阳系。{h.y}你曾{h.act}；现在他们与你的母星成了敌人。"]},"card":{"cls":"bad","title":"「{civ}」向母星开战","body":"你看到的是{f.y}的光：「{civ}」与「{other}」开战了。{h.y}，你曾{h.act}。"}},
-{"id":"ally.confront","on":"arrival","subject":"here","when":[{"fact":{"type":["butcher","ally_war"],"target":"$c","known":"ship","as":"b"}},{"fact":{"type":["god","ally","gift_l","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"target":"$c","actor":"ship","known":"any","as":"h"}},{"not":{"scene":["故人","故人·怨","故人·求"]}}],"once":"subject","cls":"warn","scene":"旧盟","text":{"show":["你认识的「{civ}」已经不是当年那个{h.d.rel}伙伴了（{h.y}）：{b.y}，{b.d.what}。舰桥上，他们的使节在等你开口。","「{civ}」认出了{ship}。{h.y}你曾{h.act}；{b.y}，{b.d.what}。他们知道你看到了。"]},"options":[{"id":"ally.mediate","label":"调停：劝他们与母星停战","desc":"以老朋友的身份去谈。成功与否取决于他们还念不念旧情。","when":[{"rel":{"with":"home","type":"战争"}}]},{"id":"ally.question","label":"质问：他们为什么这么做","desc":"听听他们自己的说法。","when":[{"fact":{"type":"butcher","target":"$c","known":"ship"}}]},{"id":"ally.side","label":"站在他们一边","desc":"他们会善待你。母星的档案会记下这件事。"},{"id":"ally.retaliate","label":"报复：向全宇宙广播他们的坐标","desc":"黑暗森林式的报复。歌者迟早会看到；他们也会恨你到底。"}]},
-{"id":"ally.mediate","on":"choice","when":[{"rel":{"with":"home","type":"战争"}}],"outcomes":[{"p":0.45,"mod":[{"if":{"stat":"att","gte":0.3},"x":1.6},{"if":{"temper":["好战"]},"x":0.5}],"cls":"good","effects":[{"op":"rel","with":"home","type":"停战"},{"op":"imprint","v":0.1}],"emit":{"type":"mediated"},"echo":true,"imp":3,"log":["在{ship}的斡旋下，「{civ}」与「{home}」签下了停火协议。"],"result":"你们谈了整整一年。最后他们同意停火：为了{h.y}那份{h.d.rel}之约，也为了你。「{civ}」与「{home}」的战争暂时停了下来。"},{"cls":"bad","effects":[{"op":"imprint","v":-0.3}],"emit":{"type":"mediate_failed"},"expel":true,"result":"他们听你说完，只回了一句：「这不关你的事。」你被礼貌而坚决地请出了星系。战争还在继续。"}]},
+{"id":"ally.butcher","on":"fact:cleared","subject":"actor","when":[{"fact":{"type":["ally","trade","teach"],"target":"$c","actor":"ship","known":"any","as":"h"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"forbid":["echo.ally.berth","echo.ally.festival","echo.trade.prosper","echo.teach.institute"],"emit":{"type":"butcher","data":{"victim":"{f.d.victim}","what":"他们向「{f.d.victim}」射出了光粒"}},"text":{"log":["「{civ}」清理了「{f.d.victim}」。{h.y}你曾{h.act}；如今，他们也成了黑暗森林里的猎手。{v.why}","{f.y}，「{civ}」向「{f.d.victim}」射出了光粒。你还记得{h.y}{h.act}时的样子。{v.why}"]},"pre":[{"calc":"why"}],"card":{"cls":"bad","w":7,"title":"你的{h.d.rel}伙伴成了屠夫：「{civ}」","body":"你看到的是{f.y}的光：「{civ}」清理了「{f.d.victim}」。{h.y}，你曾{h.act}。{v.why}"}},
+{"id":"ally.war_home","on":"fact:war","subject":"either","when":[{"earth":"$o"},{"earth":"$c","is":false},{"fact":{"type":["ally","trade"],"target":"$c","actor":"ship","known":"any","as":"h"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"forbid":["echo.ally.berth","echo.ally.festival","echo.trade.prosper","echo.teach.institute"],"emit":{"type":"ally_war","data":{"other":"{other}","what":"他们向「{other}」开战"}},"text":{"log":["「{civ}」与「{other}」开战了。{h.y}你替他们和母星牵起的{h.d.rel}之约，没能挡住这场战争。","{f.y}，「{civ}」的舰队驶向太阳系。{h.y}你曾{h.act}；现在他们与你的母星成了敌人。"]},"card":{"cls":"bad","w":6,"title":"「{civ}」向母星开战","body":"你看到的是{f.y}的光：「{civ}」与「{other}」开战了。{h.y}，你曾{h.act}。"}},
+{"id":"ally.confront","on":"arrival","subject":"here","when":[{"fact":{"type":["butcher","ally_war"],"target":"$c","known":"ship","as":"b"}},{"fact":{"type":["god","ally","gift_l","warned","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"target":"$c","actor":"ship","known":"any","as":"h"}},{"not":{"scene":["故人","故人·怨","故人·求"]}}],"once":"subject","cls":"warn","scene":"旧盟","text":{"show":["你认识的「{civ}」已经不是当年那个{h.d.rel}伙伴了（{h.y}）：{b.y}，{b.d.what}。舰桥上，他们的使节在等你开口。","「{civ}」认出了{ship}。{h.y}你曾{h.act}；{b.y}，{b.d.what}。他们知道你看到了。"]},"options":[{"id":"ally.mediate","label":"调停：劝他们与母星[停战|讲和]","desc":"以老朋友的身份去谈。成功与否取决于他们还念不念旧情。","when":[{"fact":{"type":"ally_war","target":"$c","known":"ship"}},{"alive":"home"}]},{"id":"ally.question","label":"质问：他们为什么这么做","desc":"听听他们自己的说法。","when":[{"fact":{"type":"butcher","target":"$c","known":"ship"}}]},{"id":"ally.side","label":"站在他们一边","desc":"他们会善待你。母星的档案会记下这件事。"},{"id":"ally.retaliate","label":"报复：向全宇宙广播他们的坐标","desc":"黑暗森林式的报复。歌者迟早会看到；他们也会恨你到底。"}]},
+{"id":"ally.mediate","on":"choice","when":[{"alive":"home"}],"outcomes":[{"when":[{"rel":{"with":"home","type":"战争"}}],"p":0.45,"mod":[{"if":{"stat":"att","gte":0.3},"x":1.6},{"if":{"temper":["好战"]},"x":0.5}],"cls":"good","effects":[{"op":"rel","with":"home","type":"停战"},{"op":"imprint","v":0.1}],"emit":{"type":"mediated","data":{"how":"ceasefire"}},"echo":true,"imp":3,"log":["在{ship}的斡旋下，「{civ}」与「{home}」签下了停火协议。"],"result":"你们谈了整整一年。最后他们同意停火：为了{h.y}那份{h.d.rel}之约，也为了你。「{civ}」与「{home}」的战争暂时停了下来。"},{"when":[{"rel":{"with":"home","type":"战争"}}],"cls":"bad","effects":[{"op":"imprint","v":-0.3}],"emit":{"type":"mediate_failed"},"expel":true,"result":"他们听你说完，只回了一句：「这不关你的事。」你被礼貌而坚决地请出了星系。战争还在继续。"},{"p":0.7,"mod":[{"if":{"stat":"att","gte":0.3},"x":1.3}],"cls":"good","effects":[{"op":"rel","with":"home","type":"贸易"},{"op":"imprint","v":0.1}],"emit":{"type":"mediated","data":{"how":"treaty"}},"echo":true,"imp":3,"log":["{ship}在「{civ}」与「{home}」之间奔走，把一纸停火变成了正式的和约。"],"result":"仗已经停了，但两边只是各自收兵，谁也没签字。你在两边之间来回跑了一年，最后把停火变成了一份正式的和约，商船可以重新开过去了。"},{"cls":"warn","effects":[{"op":"imprint","v":-0.1}],"emit":{"type":"mediate_failed"},"result":"「仗已经打完了，」他们说，「用不着一艘外来的飞船替我们记账。」你没能让他们签字。"}]},
+{"id":"echo.mediated.memorial","on":"year","need":["mediated"],"when":[{"fact":{"type":"mediated","target":"$c","actor":"ship","known":"any","as":"m"}},{"since":{"as":"m","min":30}},{"noFact":{"type":"butcher","target":"$c"}}],"p":0.01,"once":"subject","echo":true,"text":{"log":["「{civ}」在边境上立了一块碑，纪念{m.y}那场没有再打下去的战争。碑文的最后一行是{ship}的名字。","「{civ}」与「{home}」的边境哨所之间，每年都会交换一次礼物。这个习惯始于{m.y}，始于{ship}。"]}},
 {"id":"ally.question","on":"choice","outcomes":[{"cls":"warn","pre":[{"calc":"why"}],"effects":[{"op":"imprint","v":-0.05}],"emit":{"type":"questioned"},"result":"他们给你看了监听记录：「{b.d.victim}」的坐标在深空里亮了很久。「不是我们，也会是别人。」他们说，「这片森林里，先开枪的才能活下来。」{v.why}"}]},
 {"id":"ally.side","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"imprint","tag":"盟友","v":0.3},{"op":"ship","supply":40,"tech":3}],"emit":{"type":"sided"},"echo":true,"imp":3,"log":["{ship}在「{civ}」最孤立的时候站在了他们一边。「{home}」的档案里，这艘船从此多了一个词：叛徒。"],"result":"你留下来，和他们站在一起。他们把你的货舱装满（补给 {v.supply}，飞船科技 {v.tech}）。消息会以光速传回母星——那里会有人记住这件事。"}]},
 {"id":"ally.retaliate","on":"choice","outcomes":[{"cls":"bad","effects":[{"op":"expo","at":"c.home","kind":"bcast","v":3},{"op":"imprint","tag":"入侵者","v":-0.9}],"emit":{"type":"retaliated","tags":["player","harm"]},"echo":true,"imp":3,"expel":true,"log":["{ship}向全宇宙广播了「{civ}」母星的坐标。"],"result":"你把「{civ}」母星的坐标射向了全宇宙。这道光要走几十到几百年才会被星图之外的清理者看到。他们的舰队把你赶出了星系，从此你在他们的档案里只有一个名字：入侵者。"}]},
-{"id":"home.hunter_map","on":"fact:cleared","subject":"actor","when":[{"earth":"$c"},{"stat":"f.data.kind","eq":"map"},{"fact":{"type":"told","target":"$c","actor":"ship","known":"any","as":"t"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"text":{"log":["「{civ}」按你{t.y}带回的星图，找到并清理了「{f.d.victim}」。","你{t.y}讲给母星的旅途见闻里有「{f.d.victim}」的坐标。{f.y}，「{civ}」用它射出了光粒。"]},"card":{"cls":"bad","title":"母星成了猎手","body":"你看到的是{f.y}的光：「{civ}」清理了「{f.d.victim}」。坐标来自你{t.y}带回母星的星图。"}},
-{"id":"home.hunter","on":"fact:cleared","subject":"actor","when":[{"earth":"$c"},{"not":{"stat":"f.data.kind","eq":"map"}}],"once":"subject","imp":3,"text":{"log":["「{civ}」第一次向别的文明射出了光粒：目标是「{f.d.victim}」。","{f.y}，「{civ}」的深空监听网发现了「{f.d.victim}」。议会只争论了三天。"]},"card":{"cls":"bad","title":"母星成了猎手","body":"你看到的是{f.y}的光：「{civ}」向「{f.d.victim}」射出了光粒。你出发时的那个文明，学会了黑暗森林的规矩。"}},
+{"id":"home.hunter_map","on":"fact:cleared","subject":"actor","when":[{"earth":"$c"},{"stat":"f.data.kind","eq":"map"},{"fact":{"type":"told","target":"$c","actor":"ship","known":"any","as":"t"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"text":{"log":["「{civ}」按你{t.y}带回的星图，找到并清理了「{f.d.victim}」。","你{t.y}讲给母星的旅途见闻里有「{f.d.victim}」的坐标。{f.y}，「{civ}」用它射出了光粒。"]},"card":{"cls":"bad","w":6,"key":"home_hunter","title":"母星成了猎手","body":"你看到的是{f.y}的光：「{civ}」清理了「{f.d.victim}」。坐标来自你{t.y}带回母星的星图。"}},
+{"id":"home.hunter","on":"fact:cleared","subject":"actor","when":[{"earth":"$c"},{"not":{"stat":"f.data.kind","eq":"map"}}],"once":"subject","imp":3,"text":{"log":["「{civ}」第一次向别的文明射出了光粒：目标是「{f.d.victim}」。","{f.y}，「{civ}」的深空监听网发现了「{f.d.victim}」。议会只争论了三天。"]},"card":{"cls":"bad","w":4,"key":"home_hunter","title":"母星成了猎手","body":"你看到的是{f.y}的光：「{civ}」向「{f.d.victim}」射出了光粒。你出发时的那个文明，学会了黑暗森林的规矩。"}},
 {"id":"home.archive","on":"arrival","subject":"here","when":[{"earth":"$c"},{"calc":"archive"},{"noFact":{"type":"archive_read","target":"$c","maxAge":200}}],"cls":"warn","text":{"show":["母星的档案馆向你开放了一份标着「深空清理记录」的卷宗。"]},"options":[{"id":"home.archive_read","label":"查阅母星的清理档案","desc":"看看你不在的这些年，母星对别的文明做了什么。"}]},
 {"id":"home.archive_read","on":"choice","outcomes":[{"cls":"bad","pre":[{"calc":"archive"}],"emit":{"type":"archive_read"},"result":"卷宗里一共 {v.archiveN} 条记录：{v.archive}。{v.archiveYou}"}]},
 {"id":"home.refugees","on":"fact:cleared","subject":"target","dead":true,"when":[{"earth":"$o"},{"stat":"c.peakTech","gte":55}],"p":0.75,"once":"subject","effects":[{"op":"refugees","from":"$c","name":"遗民舰队"}],"emit":{"type":"refugee_vow","target":"spawned","data":{"victim":"{civ}"}},"scope":"spawned","imp":3,"text":{"log":["「{civ}」的遗民在流亡中立誓：总有一天，要让太阳也尝到光粒的滋味。","「{civ}」的幸存者把那颗光粒的来向刻在旗舰的船首：太阳。"]}},
-{"id":"refugee.broadcast","on":"year","need":["refugee_vow"],"when":[{"fact":{"type":"refugee_vow","target":"$c","as":"r"}},{"since":{"as":"r","min":100}},{"stat":"c.tech","gte":50},{"noFact":{"type":"apology","target":"$c"}}],"p":0.004,"once":"subject","imp":3,"effects":[{"op":"expo","at":"sun","kind":"war","v":3}],"emit":{"type":"refugee_bcast","actor":"$c","target":"home"},"text":{"log":["「{civ}」向全宇宙广播了太阳的坐标：这是「{r.d.victim}」的复仇。","「{civ}」兑现了誓言：太阳的坐标被射向了深空的每一个方向。"]},"card":{"cls":"bad","title":"遗民广播了太阳的坐标","body":"你看到的是{year}的光：被母星清理的「{r.d.victim}」，它的遗民「{civ}」向全宇宙广播了太阳的坐标。"}},
+{"id":"refugee.broadcast","on":"year","need":["refugee_vow"],"when":[{"fact":{"type":"refugee_vow","target":"$c","as":"r"}},{"since":{"as":"r","min":100}},{"stat":"c.tech","gte":50},{"noFact":{"type":"apology","target":"$c"}}],"p":0.004,"once":"subject","imp":3,"effects":[{"op":"expo","at":"sun","kind":"war","v":3}],"emit":{"type":"refugee_bcast","actor":"$c","target":"home"},"text":{"log":["「{civ}」向全宇宙广播了太阳的坐标：这是「{r.d.victim}」的复仇。","「{civ}」兑现了誓言：太阳的坐标被射向了深空的每一个方向。"]},"card":{"cls":"bad","w":7,"title":"遗民广播了太阳的坐标","body":"你看到的是{year}的光：被母星清理的「{r.d.victim}」，它的遗民「{civ}」向全宇宙广播了太阳的坐标。"}},
 {"id":"refugee.intercept","on":"arrival","subject":"near","range":130,"when":[{"fact":{"type":"refugee_vow","target":"$c","as":"r"}},{"reach":{"as":"r","speed":0.9}},{"stat":"c.tech","gte":55},{"noFact":{"type":["apology","refugee_met"],"target":"$c"}}],"p":0.6,"once":"subject","cooldownGroup":"fleet","groupCooldown":200,"cls":"bad","echo":true,"emit":{"type":"refugee_met"},"text":{"show":["「{civ}」截住了你。他们是{r.y}被母星清理的「{r.d.victim}」的遗民——而{ship}的船身上，印着太阳系的识别码。","一支伤痕累累的舰队挡在航线上。「{civ}」：{r.y}，「{home}」的光粒落在了他们的故乡「{r.d.victim}」。他们认出了你从哪里来。"]},"options":[{"id":"refugee.apologize","label":"替母星道歉","desc":"你不是开枪的人，但你来自那里。"},{"id":"refugee.flee","label":"强行突围","desc":"曲率引擎全开。可能逃得掉，也可能被打穿货舱。"}]},
 {"id":"refugee.apologize","on":"choice","outcomes":[{"p":0.5,"mod":[{"if":{"fact":{"type":"archive_read","actor":"ship","known":"any"}},"x":1.4}],"cls":"good","emit":{"type":"apology"},"effects":[{"op":"ship","supply":-10}],"echo":true,"imp":3,"log":["{ship}替「{home}」向「{civ}」道歉。遗民们放弃了广播太阳坐标的计划。"],"result":"你讲了很久：你离开时母星是什么样子，你又在档案里读到了什么。他们的首领最后说：「我们不会忘记。但我们不会变成你们。」他们放你离开，也放弃了向全宇宙广播太阳坐标的计划。（补给 {v.supply}）"},{"cls":"bad","effects":[{"op":"ship","supply":-35}],"emit":{"type":"refugee_spurned"},"result":"「道歉？」他们打穿了你的货舱（补给 {v.supply}），然后让你走——好让你回去告诉太阳：他们还活着。"}]},
 {"id":"refugee.flee","on":"choice","outcomes":[{"p":0.5,"cls":"warn","effects":[{"op":"ship","supply":-15}],"result":"你全速冲出包围，只挨了几发擦边弹（补给 {v.supply}）。他们没有追——他们要找的从来不是你。"},{"cls":"bad","effects":[{"op":"ship","supply":-35}],"result":"突围失败。他们打穿了货舱，把你扔在原地（补给 {v.supply}）。"}]},
 {"id":"recog.blame","on":"recognize","subject":"here","group":"recog","when":[{"diaspora":true},{"fact":{"type":"cleared","target":"$c","known":"any","as":"k"}},{"flag":"k.data.player"}],"once":"subject","cls":"bad","scene":"故人·怨","imp":3,"text":{"show":["「{civ}」认出了{ship}。他们是「{k.d.victim}」的流亡者。档案里写着：{k.y}落下的{k.d.weapon}，是被{k.d.why}引来的。舰桥上没有人说话。","「{civ}」的哨舰核对了你的识别码，然后整支舰队都转了过来。{k.y}，「{k.d.victim}」被抹掉——他们一直知道那是谁留下的痕迹：{k.d.why}。"]},"options":[{"id":"recog.apologize","label":"承认，并道歉","desc":"你无法弥补，但可以不再躲。"},{"id":"recog.give_tech","label":"把飞船上的技术资料全给他们","desc":"飞船科技不会下降，但这是你能给的全部。"}]},
 {"id":"recog.apologize","on":"choice","outcomes":[{"p":0.6,"cls":"warn","effects":[{"op":"imprint","v":0.25}],"emit":{"type":"apology"},"echo":true,"log":["{ship}向「{civ}」承认了当年的事。"],"result":"你说完，很久没人开口。最后他们的长老说：「你走吧。我们会把这件事写下来：那艘船回来过，而且没有逃。」"},{"cls":"bad","effects":[{"op":"imprint","v":-0.2},{"op":"ship","supply":-20}],"expel":true,"result":"道歉换来的是一轮警告射击（补给 {v.supply}）。他们不需要你的道歉，只需要你离开。"}]},
 {"id":"recog.give_tech","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"imprint","v":0.35},{"op":"add","path":"c.tech","v":1}],"emit":{"type":"reparation"},"echo":true,"log":["{ship}把全部技术资料交给了「{civ}」，作为迟到的赔偿。"],"result":"他们收下了资料。没有道谢，但放你走时，哨舰朝你闪了三下灯——那是他们送别死者的方式。"}]},
-{"id":"recog.demand","on":"recognize","subject":"here","group":"recog","when":[{"diaspora":true},{"fact":{"type":"cleared","target":"$c","known":"any","as":"k"}},{"noflag":"k.data.player"},{"fact":{"type":["god","ally","gift_l","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"target":"$c","actor":"ship","known":"any","as":"h"}}],"once":"subject","cls":"warn","scene":"故人·求","imp":3,"text":{"show":["「{civ}」认出了{ship}：{h.y}你曾{h.act}。如今他们是流亡者，{k.y}故乡被{k.d.weapon}毁掉。他们想要你的星图——想知道哪里还安全，以及那件武器是从哪里来的。","「{civ}」把你请上旗舰。「你见过外面。」他们说，「{k.y}之后我们就一直在逃。把你的星图给我们。」"]},"options":[{"id":"recog.give_maps","label":"交出星图","desc":"你去过的每一个地方（包括太阳）都会在他们的地图上。"},{"id":"recog.refuse","label":"拒绝","desc":"星图可能害死别人，也可能救他们。"}]},
+{"id":"recog.demand","on":"recognize","subject":"here","group":"recog","when":[{"diaspora":true},{"fact":{"type":"cleared","target":"$c","known":"any","as":"k"}},{"noflag":"k.data.player"},{"fact":{"type":["god","ally","gift_l","warned","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"target":"$c","actor":"ship","known":"any","as":"h"}}],"once":"subject","cls":"warn","scene":"故人·求","imp":3,"text":{"show":["「{civ}」认出了{ship}：{h.y}你曾{h.act}。如今他们是流亡者，{k.y}故乡被{k.d.weapon}毁掉。他们想要你的星图——想知道哪里还安全，以及那件武器是从哪里来的。","「{civ}」把你请上旗舰。「你见过外面。」他们说，「{k.y}之后我们就一直在逃。把你的星图给我们。」"]},"options":[{"id":"recog.give_maps","label":"交出星图","desc":"你去过的每一个地方（包括太阳）都会在他们的地图上。"},{"id":"recog.refuse","label":"拒绝","desc":"星图可能害死别人，也可能救他们。"}]},
 {"id":"recog.give_maps","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"leak","v":0.4,"also":0.3},{"op":"imprint","tag":"恩人","v":0.5},{"op":"ship","supply":50,"tech":2},{"op":"pass","years":300}],"emit":{"type":"starmap","actor":"ship","tags":["player","help"],"data":{"rel":"交出星图","what":"星图"}},"result":"你交出了星图。他们回赠了补给和一些技术（补给 {v.supply}，飞船科技 {v.tech}），还有一张 300 年的通行证。「我们会记得，」他们说，「是你给我们指了路。」"}]},
 {"id":"recog.refuse","on":"choice","outcomes":[{"cls":"dim","effects":[{"op":"imprint","v":-0.2}],"expel":true,"result":"他们没有强抢。流亡者已经没有力气再树一个敌人了。你离开时，他们的舰队还停在原地，像在等别的什么人。"}]},
-{"id":"recog.grateful","on":"recognize","subject":"here","group":"recog","when":[{"fact":{"type":["god","ally","gift_l","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"target":"$c","actor":"ship","known":"any","as":"h"}},{"any":[{"diaspora":true},{"scene":["冷漠"]},{"flag":"c.parent"}]},{"noFact":{"type":["butcher","ally_war","retaliated","hostile"],"target":"$c"}}],"once":"subject","cls":"good","scene":"故人","text":{"show":["「{civ}」的档案馆认出了{ship}：{h.y}，你曾{h.act}。哨舰撤去了炮口，港口为你打开。","扫描刚开始就停了。「{civ}」的通讯官念出了你的船名，又念出了一个年份：{h.y}。「我们的教科书里有你。」"]},"options":[{"id":"recog.supply","label":"接受他们的补给","desc":"老朋友的后代会把货舱装满。"},{"id":"recog.learn","label":"向他们求教","desc":"他们远比你先进，而且愿意教。"}]},
+{"id":"recog.grateful","on":"recognize","subject":"here","group":"recog","when":[{"fact":{"type":["god","ally","gift_l","warned","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"target":"$c","actor":"ship","known":"any","as":"h"}},{"any":[{"diaspora":true},{"scene":["冷漠"]},{"flag":"c.parent"}]},{"noFact":{"type":["butcher","ally_war","retaliated","hostile"],"target":"$c"}}],"once":"subject","cls":"good","scene":"故人","text":{"show":["「{civ}」的档案馆认出了{ship}：{h.y}，你曾{h.act}。哨舰撤去了炮口，港口为你打开。","扫描刚开始就停了。「{civ}」的通讯官念出了你的船名，又念出了一个年份：{h.y}。「我们的教科书里有你。」"]},"options":[{"id":"recog.supply","label":"接受他们的补给","desc":"老朋友的后代会把货舱装满。"},{"id":"recog.learn","label":"向他们求教","desc":"他们远比你先进，而且愿意教。"}]},
 {"id":"recog.supply","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"ship","supply":60,"tech":1},{"op":"imprint","tag":"恩人","v":0.2}],"emit":{"type":"recog_met"},"echo":true,"log":["{ship}回来了。「{civ}」以祖先恩人的礼节接待了它。"],"result":"他们按祖先留下的礼节接待了你（补给 {v.supply}，飞船科技 {v.tech}）。临走时，一个孩子递给你一本书，封面上画着你的飞船。"}]},
 {"id":"recog.learn","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"ship","tech":2,"techGap":0.3},{"op":"imprint","tag":"恩人","v":0.2}],"emit":{"type":"recog_met"},"echo":true,"log":["「{civ}」把他们的科学回赠给了祖先的恩人{ship}。"],"result":"他们说：「当年你教了我们的祖先，现在轮到我们。」飞船科技 {v.tech}。"}]},
 {"id":"payoff.gratitude_fleet","on":"arrival","subject":"near","range":90,"when":[{"stat":"c.tech","gte":55},{"calc":"help"},{"any":[{"fact":{"type":"seek_ship","target":"$c"}},{"stat":"att","gte":0.4}]},{"noFact":{"type":["butcher","ally_war","retaliated","faith_met","recog_met"],"target":"$c"}}],"p":0.4,"once":"subject","cooldownGroup":"fleet","groupCooldown":400,"cls":"good","echo":true,"emit":{"type":"fleet_met"},"effects":[{"op":"ship","supply":40,"tech":2,"techGap":0.15}],"text":{"show":["一支来自「{civ}」的舰队在这里等你。{h.y}你曾{h.act}，他们一直记着。他们带来了补给和技术（补给 {v.supply}，飞船科技 {v.tech}）。","「{civ}」的舰队在{here}找到了{ship}。{h.y}，你曾{h.act}；他们一直在等这一天（补给 {v.supply}，飞船科技 {v.tech}）。"]}},
 {"id":"payoff.revenge_fleet","on":"arrival","subject":"near","range":90,"when":[{"stat":"c.tech","gte":55},{"fact":{"type":["hostile","devil","retaliated"],"target":"$c","actor":"ship","known":"any","as":"h"}},{"any":[{"fact":{"type":"seek_revenge","target":"$c"}},{"stat":"att","lte":-0.4}]},{"noFact":{"type":["apology","revenge_met"],"target":"$c"}}],"p":0.4,"once":"subject","cooldownGroup":"fleet","groupCooldown":400,"cls":"bad","echo":true,"emit":{"type":"revenge_met"},"effects":[{"op":"ship","supply":-35}],"text":{"show":["「{civ}」的复仇舰队截住了你：他们没有忘记{h.y}你曾{h.act}。飞船的货舱被打穿（补给 {v.supply}）。","{here}的轨道上，「{civ}」的战舰等了你很久。{h.y}的事，他们一笔一笔记着（补给 {v.supply}）。"]}},
-{"id":"rel.founded","on":"fact:god","when":[{"noFact":{"type":"faith_founded","target":"$c"}},{"noFact":{"type":"devil","target":"$c","actor":"ship"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"effects":[{"op":"set","path":"c.religion","v":"{shipBase}教"},{"op":"protect","years":300,"floor":0.3,"quiet":0.35}],"emit":{"type":"faith_founded"},"unlock":[{"event":"rel.schism","delay":[30,160]},{"event":"rel.pilgrimage","delay":[20,120]},{"event":"rel.false_prophet","delay":[40,220]}],"text":{"log":["「{civ}」把你奉为神明，「{religion}」成了他们的国教。神庙里供着一艘发光的小船。经书第一章写着：神说，不要向黑暗呼喊。","「{religion}」在「{civ}」传开了：神乘着光来，又乘着光走。祭司们教导信徒安静地等待，不要向天空喊叫。","「{civ}」的每座城市都建起了「{religion}」的神庙，屋顶都朝着你离开的方向。教义说：神喜欢安静的孩子。"]}},
-{"id":"rel.devil_to_god","on":"fact:god","when":[{"fact":{"type":"devil","target":"$c","actor":"ship","as":"d"}},{"noFact":{"type":"faith_founded","target":"$c"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"effects":[{"op":"set","path":"c.religion","v":"{shipBase}教"},{"op":"protect","years":300,"floor":0.3,"quiet":0.35}],"forbid":["dev.arms","dev.revenge","dev.ritual_fades"],"emit":{"type":"faith_founded","data":{"fromDevil":1}},"unlock":[{"event":"rel.schism","delay":[30,160]},{"event":"rel.pilgrimage","delay":[20,120]},{"event":"rel.false_prophet","delay":[40,220]}],"text":{"log":["「{civ}」的{ritual}在一夜之间变了意思：{d.y}的天外恶魔，原来是来考验他们的神。面具还是那副面具，现在被供在神庙里。","恶魔回来了，这一次带着神迹。「{civ}」的祭司宣布：{d.y}的降临是一场试炼，而他们通过了。{ritual}从此改叫「归神节」。"]}},
-{"id":"rel.god_to_devil","on":"fact:devil","when":[{"fact":{"type":"faith_founded","target":"$c","as":"r"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"effects":[{"op":"add","path":"c.stab","v":-0.15,"min":0},{"op":"set","path":"c.sects","v":["旧约派","新约派"]}],"emit":{"type":"faith_schism","data":{"why":"devil"}},"forbid":["rel.schism"],"unlock":[{"event":"rel.holy_war","delay":[10,80]},{"event":"rel.reformation","delay":[30,200]}],"text":{"log":["神回来了，却是恶魔的模样。「{religion}」当场裂成了「{sect0}」和「{sect1}」：一派说神在惩罚他们，一派说那根本不是神。"]}},
+{"id":"rel.founded","on":"fact:god","when":[{"noFact":{"type":"faith_founded","target":"$c"}},{"noFact":{"type":"devil","target":"$c","actor":"ship"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"effects":[{"op":"set","path":"c.religion","v":"{shipBase}教"},{"op":"protect","years":300,"floor":0.3,"quiet":0.35}],"emit":{"type":"faith_founded"},"unlock":[{"event":"rel.schism","delay":[30,160],"window":900},{"event":"rel.pilgrimage","delay":[20,120],"window":450},{"event":"rel.false_prophet","delay":[40,220],"window":600}],"text":{"log":["「{civ}」把你奉为神明，「{religion}」成了他们的国教。神庙里供着一艘发光的小船。经书第一章写着：神说，不要向黑暗呼喊。","「{religion}」在「{civ}」传开了：神乘着光来，又乘着光走。祭司们教导信徒安静地等待，不要向天空喊叫。","「{civ}」的每座城市都建起了「{religion}」的神庙，屋顶都朝着你离开的方向。教义说：神喜欢安静的孩子。"]}},
+{"id":"rel.devil_to_god","on":"fact:god","when":[{"fact":{"type":"devil","target":"$c","actor":"ship","as":"d"}},{"noFact":{"type":"faith_founded","target":"$c"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"effects":[{"op":"set","path":"c.religion","v":"{shipBase}教"},{"op":"protect","years":300,"floor":0.3,"quiet":0.35}],"forbid":["dev.arms","dev.revenge","dev.ritual_fades"],"emit":{"type":"faith_founded","data":{"fromDevil":1}},"unlock":[{"event":"rel.schism","delay":[30,160],"window":900},{"event":"rel.pilgrimage","delay":[20,120],"window":450},{"event":"rel.false_prophet","delay":[40,220],"window":600}],"text":{"log":["「{civ}」的{ritual}在一夜之间变了意思：{d.y}的天外恶魔，原来是来考验他们的神。面具还是那副面具，现在被供在神庙里。","恶魔回来了，这一次带着神迹。「{civ}」的祭司宣布：{d.y}的降临是一场试炼，而他们通过了。{ritual}从此改叫「归神节」。"]}},
+{"id":"rel.god_to_devil","on":"fact:devil","when":[{"fact":{"type":"faith_founded","target":"$c","as":"r"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"effects":[{"op":"add","path":"c.stab","v":-0.15,"min":0},{"op":"set","path":"c.sects","v":["旧约派","新约派"]}],"emit":{"type":"faith_schism","data":{"why":"devil"}},"forbid":["rel.schism"],"unlock":[{"event":"rel.holy_war","delay":[10,80]},{"event":"rel.reformation","delay":[30,200]}],"pre":[{"calc":"faith"}],"text":{"log":["神回来了，却{f.d.what}。「{religion}」当场裂成了「{sect0}」和「{sect1}」：一派说神在惩罚他们，一派说那根本不是神。","{r.y}以来，「{civ}」一直供奉着{v.sign}。{f.y}，神回来了，却{f.d.what}。「{sect1}」砸碎了神像；「{sect0}」说，这是神在考验谁的信仰更坚定。"]}},
 {"id":"dev.founded","on":"fact:devil","when":[{"noFact":{"type":"faith_founded","target":"$c"}}],"once":"subject","echo":true,"nocap":true,"effects":[{"op":"set","path":"c.ritual","v":"驱魔节"}],"emit":{"type":"devil_founded"},"unlock":[{"event":"dev.arms","delay":[40,200]},{"event":"dev.ritual_fades","delay":[350,700]}],"text":{"log":["「{civ}」的孩子们每年都过「{ritual}」，戴着照你的飞船做的面具。","「{civ}」的巫师在每个村口立起了驱魔柱，柱顶刻着一艘长着獠牙的飞船。从此每年都有「{ritual}」。","「{civ}」的历法里多了一个节日：「{ritual}」。那一夜所有人都熄灯，假装天上什么也没有。"]}},
 {"id":"dev.arms","on":"pending","when":[{"fact":{"type":"devil_founded","target":"$c"}},{"stat":"c.tech","gte":20}],"p":0.01,"once":"subject","echo":true,"effects":[{"op":"add","path":"c.exp","v":0.1,"max":1}],"emit":{"type":"devil_arms"},"unlock":[{"event":"dev.revenge","delay":[60,300]}],"text":{"log":["对「天外恶魔」的恐惧塑造了「{civ}」：他们把大量资源投进了防空和军备。{ritual}上的面具，换成了防空炮的模型。","「{civ}」的第一座天文台不是为了看星星，而是为了在恶魔回来之前发现它。每年{ritual}，观测员都要宣誓。"]}},
 {"id":"dev.revenge","on":"pending","when":[{"fact":{"type":"devil_arms","target":"$c"}},{"stat":"c.tech","gte":55},{"noFact":{"type":"devil_faded","target":"$c"}}],"p":0.01,"once":"subject","echo":true,"emit":{"type":"seek_revenge"},"text":{"log":["「{civ}」组建了一支舰队，誓言找到当年那个天外恶魔。出征前夜正逢{ritual}，舰员们戴上了那副面具。"]}},
 {"id":"dev.ritual_fades","on":"pending","when":[{"fact":{"type":"devil_founded","target":"$c"}}],"p":0.01,"once":"subject","echo":true,"effects":[{"op":"imprint","v":0.35}],"emit":{"type":"devil_faded"},"forbid":["dev.revenge"],"text":{"log":["「{ritual}」已经变成了孩子们的节日：没人再相信恶魔，只剩下糖果和面具。","「{civ}」的学者重新考证了{ritual}的来历：那艘「恶魔飞船」也许只是一个迷路的旅人。"]}},
-{"id":"rel.schism","on":"pending","when":[{"fact":{"type":"faith_founded","target":"$c","as":"r"}},{"stat":"c.tech","gte":8}],"p":0.012,"mod":[{"if":{"stat":"c.stab","lt":0.4},"x":2.5}],"once":"subject","echo":true,"nocap":true,"effects":[{"op":"add","path":"c.stab","v":-0.1,"min":0},{"op":"set","path":"c.sects","v":["[守望|归来|圣船]派","[离弃|觉醒|无神]派"]}],"emit":{"type":"faith_schism"},"unlock":[{"event":"rel.holy_war","delay":[10,120]},{"event":"rel.reformation","delay":[30,220]}],"text":{"log":["「{religion}」分裂成「{sect0}」和「{sect1}」：一派相信神终将归来，一派说神早已抛弃了他们。","为了{ship}究竟会不会回来，「{civ}」的祭司们吵了一个世纪，最后分成了「{sect0}」和「{sect1}」。","「{sect1}」的先知在广场上烧掉了神像：「神走了{v.age}年，它不会回来了。」「{sect0}」的信徒把灰烬一捧一捧收了回去。"]},"pre":[{"calc":"age"}]},
-{"id":"rel.holy_war","on":"pending","when":[{"fact":{"type":"faith_schism","target":"$c"}},{"stat":"c.tech","gte":8}],"p":0.008,"mod":[{"if":{"temper":["好战"]},"x":2.5},{"if":{"stat":"c.exp","gt":0.6},"x":1.5}],"once":"subject","echo":true,"nocap":true,"forbid":["rel.reformation"],"effects":[{"op":"add","path":"c.stab","v":-0.15,"min":0},{"op":"add","path":"c.exp","v":0.1,"max":1}],"emit":{"type":"faith_holywar"},"unlock":[{"event":"rel.martyr","delay":[5,60]}],"text":{"log":["「{sect0}」与「{sect1}」的宗教战争打了几十年。双方的旗帜上画着同一艘船。","以{ship}之名的战争在「{civ}」燃起：「{sect0}」的军队高唱着关于你的圣歌，攻进了「{sect1}」的城市。"]},"card":{"cls":"warn","title":"以你之名的战争","body":"你看到的是{year}的光：「{civ}」的「{sect0}」与「{sect1}」为你打起了宗教战争。"}},
-{"id":"rel.martyr","on":"pending","when":[{"fact":{"type":"faith_holywar","target":"$c"}}],"p":0.02,"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_martyr"},"text":{"log":["「{sect1}」的领袖被处死前说：「神没有抛弃我们，是我们抛弃了神。」他的墓成了两派共同的圣地。","一位「{sect0}」的老祭司走进战场中央，要求双方停火，然后死在了乱箭下。战争在第二年结束了。"]},"card":{"cls":"warn","title":"殉道者","body":"你看到的是{year}的光：「{civ}」的宗教战争里出了一位殉道者。人们说，他死前一直望着你离开的方向。"}},
-{"id":"rel.reformation","on":"pending","when":[{"fact":{"type":"faith_schism","target":"$c"}},{"stat":"c.tech","gte":20}],"p":0.012,"mod":[{"if":{"temper":["学者","商人"]},"x":2}],"once":"subject","echo":true,"nocap":true,"forbid":["rel.holy_war"],"emit":{"type":"faith_reform"},"unlock":[{"event":"rel.call","delay":[0,60]},{"event":"rel.envoy","delay":[0,200],"window":1500}],"text":{"log":["「{sect0}」赢了。改革派说：神不会再回来，要由信徒自己去找到神。他们开始[建造朝向你离去方向的巨型天线|绘制你离去的航线|收集关于{ship}的每一条记载]。","「{religion}」的宗教改革：经书里「等待」两个字被改成了「寻找」。"]},"card":{"cls":"good","title":"信徒要来找你","body":"你看到的是{year}的光：「{civ}」的宗教改革把「等待神」改成了「寻找神」。他们在找{ship}。"}},
-{"id":"rel.pilgrimage","on":"pending","when":[{"fact":{"type":"faith_founded","target":"$c","as":"r"}},{"stat":"c.tech","gte":12}],"p":0.012,"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_pilgrim"},"text":{"log":["每年都有成千上万的朝圣者走到{cHome}上你当年降落的地方，在那里等神回来。","「{civ}」修了一条通往「神降之地」的朝圣大道。沿途的每块里程碑上都刻着同一个年份：{r.y}。"]},"card":{"cls":"good","title":"朝圣者在等你","body":"你看到的是{year}的光：「{civ}」的朝圣者聚集在你当年降落的地方，等神回来。"}},
-{"id":"rel.false_prophet","on":"pending","when":[{"fact":{"type":"faith_founded","target":"$c"}},{"stat":"c.tech","gte":8}],"p":0.008,"mod":[{"if":{"stat":"c.stab","lt":0.4},"x":2}],"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_prophet"},"text":{"log":["一个自称「{shipBase}再临」的人出现在「{civ}」：他说自己就是当年的神，带着几万信徒[烧毁了旧神庙|要求国王让位|宣布末日将至]。"]},"card":{"cls":"warn","title":"有人冒充你","body":"你看到的是{year}的光：「{civ}」出现了一个自称「{shipBase}再临」的先知。他用的是你的名字。"}},
-{"id":"rel.call","on":"pending","when":[{"fact":{"type":"faith_reform","target":"$c"}},{"stat":"c.tech","gte":30}],"p":0.02,"once":"subject","echo":true,"nocap":true,"effects":[{"op":"expo","at":"c.home","kind":"radio","v":0.3}],"emit":{"type":"faith_call"},"text":{"log":["「{civ}」的射电望远镜一直对准你离开的方向，日夜向深空呼唤他们的神——这些呼唤也照亮了他们自己的坐标。"]},"card":{"cls":"warn","title":"来自「{civ}」的呼唤","body":"你收到了一段射电信号（发出于{year}）：「{religion}」的改革派在呼唤他们的神。它也照亮了他们自己的坐标。你可以回应。"}},
-{"id":"rel.call_answer","group":"faith_scene","on":"arrival","subject":"any","when":[{"fact":{"type":"faith_call","target":"$c","known":"ship","as":"k"}},{"noFact":{"type":["answered","faith_truth"],"target":"$c"}}],"once":"subject","cls":"warn","text":{"show":["你的接收机里一直有「{civ}」的呼唤（{k.y}发出，{v.dist}）。他们还在喊。"]},"pre":[{"calc":"dist"}],"options":[{"id":"rel.answer_silence","label":"回应「{civ}」：让他们安静","desc":"以神的名义命令他们停止呼喊、关掉天线。你的回信也会暴露你此刻的位置。"},{"id":"rel.answer_come","label":"回应「{civ}」：告诉他们你在哪","desc":"他们会更快造船来找你。双向的呼喊会让两边都更亮。"}]},
+{"id":"rel.schism","on":"pending","when":[{"fact":{"type":"faith_founded","target":"$c","as":"r"}},{"stat":"c.tech","gte":8}],"p":0.0035,"mod":[{"if":{"stat":"c.stab","lt":0.45},"x":3},{"if":{"atWar":true},"x":2},{"if":{"fact":{"type":["faith_blessed","returned","pilgrim_met","prophet_resolved"],"target":"$c","known":"any","maxAge":300}},"x":0.4}],"once":"subject","echo":true,"nocap":true,"effects":[{"op":"add","path":"c.stab","v":-0.1,"min":0},{"op":"set","path":"c.sects","v":["[守望|归来|圣船]派","[离弃|觉醒|无神]派"]}],"emit":{"type":"faith_schism"},"unlock":[{"event":"rel.holy_war","delay":[10,120]},{"event":"rel.reformation","delay":[30,220]}],"text":{"log":["「{religion}」分裂成「{sect0}」和「{sect1}」：一派相信神终将归来，一派说神早已抛弃了他们。","为了{ship}究竟会不会回来，「{civ}」的祭司们吵了一个世纪，最后分成了「{sect0}」和「{sect1}」。","「{sect1}」的先知在广场上烧掉了神像：「神走了{v.age}年，它不会回来了。」「{sect0}」的信徒把灰烬一捧一捧收了回去。"]},"pre":[{"calc":"age"}]},
+{"id":"rel.holy_war","on":"pending","when":[{"fact":{"type":"faith_schism","target":"$c"}},{"stat":"c.tech","gte":8}],"p":0.006,"mod":[{"if":{"temper":["好战"]},"x":2.5},{"if":{"stat":"c.exp","gt":0.6},"x":1.5},{"if":{"atWar":true},"x":2},{"if":{"stat":"c.stab","lt":0.3},"x":2},{"if":{"stat":"c.stab","gte":0.6},"x":0.5},{"if":{"fact":{"type":"faith_schism","target":"$c","data":{"why":"devil"}}},"x":2.5}],"once":"subject","echo":true,"nocap":true,"forbid":["rel.reformation"],"effects":[{"op":"add","path":"c.stab","v":-0.15,"min":0},{"op":"add","path":"c.exp","v":0.1,"max":1}],"emit":{"type":"faith_holywar"},"unlock":[{"event":"rel.martyr","delay":[5,60]}],"pre":[{"calc":"faith"}],"text":{"log":["「{sect0}」与「{sect1}」的宗教战争打了几十年。双方的旗帜上画着同一个图案：{v.sign}。","以{ship}之名的战争在「{civ}」燃起：「{sect0}」的军队高唱着关于你的圣歌，攻进了「{sect1}」的城市。"]},"card":{"cls":"warn","w":4,"title":"以你之名的战争","body":"你看到的是{year}的光：「{civ}」的「{sect0}」与「{sect1}」为你打起了宗教战争。两边的旗帜上都画着{v.sign}。"}},
+{"id":"rel.martyr","on":"pending","when":[{"fact":{"type":"faith_holywar","target":"$c"}}],"p":0.02,"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_martyr"},"text":{"log":["「{sect1}」的领袖被处死前说：「神没有抛弃我们，是我们抛弃了神。」他的墓成了两派共同的圣地。","一位「{sect0}」的老祭司走进战场中央，要求双方停火，然后死在了乱箭下。战争在第二年结束了。"]},"card":{"cls":"warn","w":3,"title":"殉道者","body":"你看到的是{year}的光：「{civ}」的宗教战争里出了一位殉道者。人们说，他死前一直望着你离开的方向。"}},
+{"id":"rel.reformation","on":"pending","when":[{"fact":{"type":"faith_schism","target":"$c"}},{"stat":"c.tech","gte":20}],"p":0.008,"mod":[{"if":{"temper":["学者","商人"]},"x":2},{"if":{"stat":"c.tech","gte":35},"x":2},{"if":{"stat":"c.stab","gte":0.5},"x":1.5},{"if":{"atWar":true},"x":0.5},{"if":{"fact":{"type":["prophet_resolved","faith_peace","faith_martyr"],"target":"$c","known":"any"}},"x":2}],"once":"subject","echo":true,"nocap":true,"forbid":["rel.holy_war"],"emit":{"type":"faith_reform"},"unlock":[{"event":"rel.call","delay":[0,60]},{"event":"rel.envoy","delay":[0,200],"window":1500}],"pre":[{"calc":"faith"}],"text":{"log":["{v.after}「{sect0}」赢了。改革派说：神不会再回来，要由信徒自己去找到神。他们开始[建造朝向你离去方向的巨型天线|绘制你离去的航线|收集关于{ship}的每一条记载]。","「{religion}」的宗教改革：经书里「等待」两个字被改成了「寻找」。{v.pastS}"]},"card":{"cls":"good","w":4,"title":"信徒要来找你","body":"你看到的是{year}的光：「{civ}」的宗教改革把「等待神」改成了「寻找神」。他们在找{ship}。"}},
+{"id":"rel.pilgrimage","on":"pending","when":[{"fact":{"type":"faith_founded","target":"$c","as":"r"}},{"stat":"c.tech","gte":12}],"p":0.0025,"mod":[{"if":{"stat":"c.stab","gte":0.6},"x":2},{"if":{"fact":{"type":"faith_blessed","target":"$c","known":"any"}},"x":2.5},{"if":{"atWar":true},"x":0.4},{"if":{"stat":"c.stab","lt":0.45},"x":0.5}],"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_pilgrim"},"unlock":[{"event":"rel.envoy","delay":[80,300],"window":1500}],"pre":[{"calc":"faith"}],"text":{"log":["每年都有成千上万的朝圣者走到{cHome}上你当年降落的地方，在那里等神回来。","「{civ}」修了一条通往「神降之地」的朝圣大道。沿途的每块里程碑上都刻着同一个年份：{r.y}。","朝圣者从「{civ}」的每个角落出发，背着{v.relic}，走向你当年降落的地方。"]},"card":{"cls":"good","w":3,"title":"朝圣者在等你","body":"你看到的是{year}的光：「{civ}」的朝圣者聚集在你当年降落的地方，等神回来。"}},
+{"id":"rel.false_prophet","on":"pending","when":[{"fact":{"type":"faith_founded","target":"$c"}},{"stat":"c.tech","gte":8}],"p":0.0022,"mod":[{"if":{"stat":"c.stab","lt":0.45},"x":2.5},{"if":{"fact":{"type":["faith_blessed","returned","pilgrim_met","prophet_resolved"],"target":"$c","known":"any","maxAge":300}},"x":0.25},{"if":{"all":[{"noFact":{"type":["faith_blessed","returned","pilgrim_met","prophet_resolved"],"target":"$c","known":"any","maxAge":600}},{"fact":{"type":"faith_founded","target":"$c","minAge":200}}]},"x":2}],"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_prophet"},"pre":[{"calc":"faith"}],"text":{"log":["一个自称「{shipBase}再临」的人出现在「{civ}」：他说自己就是当年的神，带着几万信徒[烧毁了旧神庙|要求国王让位|宣布末日将至]。","「{shipBase}再临」的信徒举着{v.sign}的画像游行：神走了{v.age}年，现在祂借一个凡人的身体回来了。"]},"card":{"cls":"warn","w":3,"title":"有人冒充你","body":"你看到的是{year}的光：「{civ}」出现了一个自称「{shipBase}再临」的先知。他用的是你的名字。"}},
+{"id":"rel.call","on":"pending","when":[{"fact":{"type":"faith_reform","target":"$c"}},{"stat":"c.tech","gte":30}],"p":0.02,"once":"subject","echo":true,"nocap":true,"effects":[{"op":"expo","at":"c.home","kind":"radio","v":0.3}],"emit":{"type":"faith_call"},"pre":[{"calc":"faith"}],"text":{"log":["「{civ}」的射电望远镜一直对准你离开的方向，日夜向深空呼唤他们的神——这些呼唤也照亮了他们自己的坐标。天线阵的基座上刻着{v.sign}。"]},"card":{"cls":"warn","w":4,"title":"来自「{civ}」的呼唤","body":"你收到了一段射电信号（发出于{year}）：「{religion}」的改革派在呼唤他们的神。它也照亮了他们自己的坐标。你可以回应。"}},
+{"id":"rel.call_answer","group":"faith_scene","on":"arrival","subject":"any","when":[{"fact":{"type":"faith_call","target":"$c","known":"ship","as":"k"}},{"noFact":{"type":["answered","faith_truth"],"target":"$c"}},{"here":false}],"once":"subject","cls":"warn","text":{"show":["你的接收机里一直有「{civ}」的呼唤（{k.y}发出，{v.dist}）。他们还在喊。"]},"pre":[{"calc":"dist"}],"options":[{"id":"rel.answer_silence","label":"回应「{civ}」：让他们安静","desc":"以神的名义命令他们停止呼喊、关掉天线。你的回信也会暴露你此刻的位置。"},{"id":"rel.answer_come","label":"回应「{civ}」：告诉他们你在哪","desc":"他们会更快造船来找你。双向的呼喊会让两边都更亮。"}]},
 {"id":"rel.answer_silence","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"silence"},{"op":"protect","years":400,"floor":0.3,"quiet":0.2},{"op":"expo","at":"here","kind":"contact","v":0.25}],"emit":{"type":"answered","data":{"how":"silence"}},"echo":true,"imp":3,"log":["神回信了：「安静。」「{civ}」关掉了所有朝向深空的天线。"],"result":"你的回信要走 {v.distN} 年才能到。等它到了，「{civ}」的天线会一座座关掉——如果那时还来得及。"}]},
 {"id":"rel.answer_come","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"expo","at":"here","kind":"bcast","v":0.8}],"emit":{"type":"answered","data":{"how":"come"}},"echo":true,"imp":3,"log":["神回信了，还告诉了他们自己在哪里。「{civ}」举国狂欢。"],"result":"你把此刻的位置发了回去（{v.distN} 光年外）。他们会来——这片森林里也可能有别的东西听见。"}]},
-{"id":"rel.envoy","on":"pending","when":[{"fact":{"type":"faith_reform","target":"$c"}},{"stat":"c.tech","gte":55}],"p":0.015,"mod":[{"if":{"fact":{"type":"answered","target":"$c"}},"x":3}],"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_envoy"},"text":{"log":["「{civ}」造出第一艘星舰，命名为「{shipBase}使者号」，出发去寻找他们的神。"]},"card":{"cls":"good","title":"「{shipBase}使者号」出发了","body":"你看到的是{year}的光：「{civ}」的信徒造出星舰，出发寻找{ship}。"}},
-{"id":"rel.envoy_meet","group":"faith_scene","on":"arrival","subject":"near","range":160,"when":[{"fact":{"type":"faith_envoy","target":"$c","as":"e"}},{"reach":{"as":"e","speed":0.9}},{"noFact":{"type":["faith_met","faith_truth"],"target":"$c"}}],"once":"subject","cooldownGroup":"fleet","groupCooldown":150,"cls":"good","echo":true,"emit":{"type":"faith_met"},"effects":[{"op":"ship","supply":40}],"text":{"show":["一艘陌生的星舰在{here}等你。舰首写着「{shipBase}使者号」——「{civ}」的信徒找了你{v.age}年。舰上的祭司跪在舷窗前，货舱里装满了供品（补给 {v.supply}）。"]},"pre":[{"calc":"age"}],"options":[{"id":"rel.keep_faith","label":"继续扮演他们的神","desc":"祝福他们，然后离开。宗教会延续下去。"},{"id":"rel.truth","label":"说出真相：你只是一艘飞船","desc":"他们找了几百年的神，原来是一个旅人。"}]},
+{"id":"rel.envoy","on":"pending","when":[{"any":[{"fact":{"type":"faith_reform","target":"$c"}},{"fact":{"type":"faith_pilgrim","target":"$c"}}]},{"stat":"c.tech","gte":55},{"noFact":{"type":"faith_truth","target":"$c"}}],"p":0.015,"mod":[{"if":{"fact":{"type":"answered","target":"$c"}},"x":3},{"if":{"fact":{"type":"faith_martyr","target":"$c"}},"x":1.5},{"if":{"fact":{"type":"faith_blessed","target":"$c","known":"any"}},"x":2}],"once":"subject","echo":true,"nocap":true,"emit":{"type":"faith_envoy"},"pre":[{"calc":"faith"}],"text":{"log":["「{civ}」造出第一艘星舰，命名为「{shipBase}使者号」，出发去寻找他们的神。舱里供着{v.relic}。","「{shipBase}使者号」离开了「{civ}」。{v.after}信徒们终于有了一艘能追上神的船。"]},"card":{"cls":"good","w":5,"title":"「{shipBase}使者号」出发了","body":"你看到的是{year}的光：「{civ}」的信徒造出星舰，带着{v.relic}，出发寻找{ship}。"}},
+{"id":"rel.envoy_meet","group":"faith_scene","on":"arrival","subject":"near","range":160,"when":[{"fact":{"type":"faith_envoy","target":"$c","as":"e"}},{"reach":{"as":"e","speed":0.9}},{"noFact":{"type":["faith_met","faith_truth"],"target":"$c"}}],"once":"subject","cooldownGroup":"fleet","groupCooldown":150,"cls":"good","echo":true,"emit":{"type":"faith_met"},"effects":[{"op":"ship","supply":40}],"text":{"show":["一艘陌生的星舰在{here}等你。舰首写着「{shipBase}使者号」——「{civ}」的信徒找了你{v.age}年。舰上的祭司捧着{v.relic}跪在舷窗前。{v.pastS}货舱里装满了供品（补给 {v.supply}）。"]},"pre":[{"calc":"age"},{"calc":"faith"}],"options":[{"id":"rel.keep_faith","label":"继续扮演他们的神","desc":"祝福他们，然后离开。宗教会延续下去。"},{"id":"rel.truth","label":"说出真相：你只是一艘飞船","desc":"他们找了几百年的神，原来是一个旅人。"}]},
 {"id":"rel.keep_faith","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"imprint","tag":"神","v":0.2},{"op":"protect","years":300,"floor":0.35,"quiet":0.3},{"op":"ship","tech":2}],"emit":{"type":"faith_blessed"},"echo":true,"imp":3,"log":["使者号带回了神的祝福。「{religion}」迎来了[黄金时代|第二次复兴]。"],"result":"你祝福了他们。使者号调头回家，舰上的人一路都在唱歌。他们留下了一些技术资料作为供品（飞船科技 {v.tech}）。"}]},
 {"id":"rel.truth","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"imprint","tag":"旅人","v":-0.2},{"op":"add","path":"c.stab","v":-0.15,"min":0}],"emit":{"type":"faith_truth"},"echo":true,"imp":3,"forbid":["rel.holy_war","rel.reformation","rel.call","rel.envoy","rel.pilgrimage","rel.false_prophet"],"log":["使者号带回了一个消息：神只是一艘飞船。「{religion}」的时代结束了。"],"result":"祭司听完，很久没有说话。最后他说：「那我们就自己走吧。」使者号调头回家，带着一个会让整个文明重新思考的消息。"}]},
-{"id":"rel.pilgrim_scene","group":"faith_scene","on":"arrival","subject":"here","when":[{"fact":{"type":"faith_pilgrim","target":"$c"}},{"noFact":{"type":["faith_truth","pilgrim_met"],"target":"$c"}}],"once":"subject","cls":"good","emit":{"type":"pilgrim_met"},"text":{"show":["「神降之地」上挤满了朝圣者。他们看见了你的飞船，整片平原安静下来。"]},"options":[{"id":"rel.bless","label":"降落，祝福朝圣者","desc":"他们会更团结；神话会再延续几百年。"},{"id":"rel.truth2","label":"告诉他们真相","desc":"你只是一个旅人。"}]},
-{"id":"rel.bless","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"add","path":"c.stab","v":0.15,"max":1},{"op":"protect","years":300,"floor":0.35,"quiet":0.3},{"op":"ship","supply":30}],"emit":{"type":"faith_blessed"},"echo":true,"imp":3,"log":["神回到了「神降之地」，祝福了朝圣者。"],"result":"你走下舷梯。几十万人同时跪下。他们把供品堆满了货舱（补给 {v.supply}）。"}]},
-{"id":"rel.truth2","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"add","path":"c.stab","v":-0.15,"min":0},{"op":"imprint","tag":"旅人","v":-0.2}],"emit":{"type":"faith_truth"},"echo":true,"imp":3,"forbid":["rel.holy_war","rel.reformation","rel.call","rel.envoy","rel.false_prophet"],"log":["神在「神降之地」亲口说：我不是神。「{religion}」从此走向衰落。"],"result":"你说完，人群里有人哭，有人笑，有人转身离开。几百年的信仰在一个下午裂开了。"}]},
-{"id":"rel.prophet_scene","group":"faith_scene","on":"arrival","subject":"here","when":[{"fact":{"type":"faith_prophet","target":"$c"}},{"noFact":{"type":["prophet_resolved","faith_truth"],"target":"$c"}}],"once":"subject","cls":"warn","text":{"show":["自称「{shipBase}再临」的先知的信徒们封锁了港口。真正的飞船来了，他们不知道该怎么办。"]},"options":[{"id":"rel.expose","label":"揭穿冒充者","desc":"神迹对决。他的教派会垮掉。"},{"id":"rel.endorse","label":"默认他","desc":"让他替你当神。"}]},
+{"id":"rel.pilgrim_scene","group":"faith_scene","on":"arrival","subject":"here","when":[{"fact":{"type":"faith_pilgrim","target":"$c"}},{"noFact":{"type":["faith_truth","pilgrim_met"],"target":"$c"}}],"once":"subject","cls":"good","emit":{"type":"pilgrim_met"},"pre":[{"calc":"faith"}],"text":{"show":["「神降之地」上挤满了朝圣者。{v.after}他们还在等。他们看见了你的飞船，整片平原安静下来。"]},"options":[{"id":"rel.bless","label":"降落，祝福朝圣者","desc":"他们会更团结；神话会再延续几百年。"},{"id":"rel.truth2","label":"告诉他们真相","desc":"你只是一个旅人。"}]},
+{"id":"rel.bless","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"add","path":"c.stab","v":0.15,"max":1},{"op":"protect","years":300,"floor":0.35,"quiet":0.3},{"op":"ship","supply":30}],"emit":{"type":"faith_blessed"},"echo":true,"imp":3,"log":["神回到了「{civ}」，祝福了信徒。"],"result":"你走下舷梯。几十万人同时跪下。他们把供品堆满了货舱（补给 {v.supply}）。"}]},
+{"id":"rel.truth2","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"add","path":"c.stab","v":-0.15,"min":0},{"op":"imprint","tag":"旅人","v":-0.2}],"emit":{"type":"faith_truth"},"echo":true,"imp":3,"forbid":["rel.holy_war","rel.reformation","rel.call","rel.envoy","rel.false_prophet"],"log":["神在「{civ}」亲口说：我不是神。「{religion}」从此走向衰落。"],"result":"你说完，人群里有人哭，有人笑，有人转身离开。几百年的信仰在一个下午裂开了。"}]},
+{"id":"rel.prophet_scene","group":"faith_scene","on":"arrival","subject":"here","when":[{"fact":{"type":"faith_prophet","target":"$c"}},{"noFact":{"type":["prophet_resolved","faith_truth"],"target":"$c"}}],"once":"subject","cls":"warn","pre":[{"calc":"faith"}],"text":{"show":["自称「{shipBase}再临」的先知的信徒们封锁了港口。他们举着{v.sign}的画像——真正的飞船来了，他们不知道该怎么办。"]},"options":[{"id":"rel.expose","label":"揭穿冒充者","desc":"神迹对决。他的教派会垮掉。"},{"id":"rel.endorse","label":"默认他","desc":"让他替你当神。"}]},
 {"id":"rel.expose","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"add","path":"c.stab","v":0.1,"max":1},{"op":"imprint","tag":"神","v":0.2}],"emit":{"type":"prophet_resolved","data":{"how":"expose"}},"echo":true,"imp":3,"log":["真正的神回来了，假先知的教派一夜瓦解。"],"result":"你只是把飞船停在城市上空，打开了探照灯。第二天，假先知的信徒散了大半。"}]},
 {"id":"rel.endorse","on":"choice","outcomes":[{"cls":"warn","effects":[{"op":"add","path":"c.exp","v":0.1,"max":1}],"emit":{"type":"prophet_resolved","data":{"how":"endorse"}},"echo":true,"imp":3,"log":["神默认了「{shipBase}再临」。新的教团接管了「{civ}」。"],"result":"你什么也没做就离开了。先知宣布：神认可了他。新的教团从此掌权。"}]},
-{"id":"warn.exposure","on":"year","need":["god","ally","gift_l","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"when":[{"calc":"help"},{"calc":"expo"},{"noflag":"c.silent"},{"noFact":{"type":"warn_expo","target":"$c","maxAge":400}}],"p":0.2,"emit":{"type":"warn_expo"},"cooldown":400,"card":{"cls":"warn","title":"「{civ}」的坐标正在变亮","body":"你看到的是{year}的光：{v.expoWhy}，「{civ}」在深空里越来越显眼（暴露度 {v.expo}）。{h.y}你曾{h.act}。如果赶到那里，也许能劝他们静默。"}},
+{"id":"rel.return","group":"faith_scene","on":"arrival","subject":"here","when":[{"fact":{"type":"faith_founded","target":"$c","as":"r"}},{"since":{"as":"r","min":40}},{"noFact":{"type":["faith_truth"],"target":"$c"}},{"noFact":{"type":["returned","pilgrim_met"],"target":"$c","known":"any","maxAge":250}},{"noFact":{"type":"faith_schism","target":"$c","data":{"why":"devil"}}}],"cls":"good","emit":{"type":"returned"},"pre":[{"calc":"faith"},{"calc":"age"}],"text":{"show":["「{civ}」的每一座神庙都敲响了钟：「{religion}」的神，在离开{v.age}年之后回来了。{v.pastS}","{v.age}年来，「{civ}」一直供奉着{v.sign}。现在，那艘船真的出现在了天上。{v.pastS}"]},"options":[{"id":"rel.bless","label":"降落，祝福他们","desc":"他们会更团结；神话会再延续几百年。"},{"id":"rel.stop_war","label":"以神的名义制止圣战","desc":"你可以命令「{sect0}」和「{sect1}」放下武器。但在战争里，一个不偏不倚的神，可能被两边都当成敌人。","when":[{"fact":{"type":"faith_holywar","target":"$c"}},{"noFact":{"type":"faith_peace","target":"$c"}}]},{"id":"rel.truth2","label":"告诉他们真相","desc":"你只是一个旅人。"}]},
+{"id":"rel.stop_war","on":"choice","outcomes":[{"p":0.55,"mod":[{"if":{"stat":"att","gte":0.5},"x":1.3}],"cls":"good","effects":[{"op":"add","path":"c.exp","v":-0.15,"min":0},{"op":"add","path":"c.stab","v":0.1,"max":1},{"op":"protect","years":200,"floor":0.35,"quiet":0.3}],"emit":{"type":"faith_peace"},"echo":true,"imp":3,"log":["神降临在「{sect0}」与「{sect1}」的两军之间，以你之名的战争结束了。"],"result":"你把飞船停在两军之间，什么也没说。第一个放下武器的是一个孩子。到了傍晚，整片战场都跪了下来。"},{"cls":"bad","emit":{"type":"devil","actor":"ship","tags":["player","harm"],"data":{"how":"wrath","what":"站在了「{sect0}」那一边","rel":"以恶魔的样子降临"}},"echo":true,"imp":3,"log":["神降临了，「{sect0}」放下了武器，「{sect1}」没有。"],"result":"「{sect0}」放下了武器，「{sect1}」没有。在他们眼里，一个命令他们投降的神，只能是恶魔。你离开时，他们正在砸碎神像。"}]},
+{"id":"warn.exposure","on":"year","need":["god","ally","gift_l","warned","teach","trade","gift_s","learn","courier","relic","scholar","starmap"],"when":[{"calc":"help"},{"calc":"expo"},{"noflag":"c.silent"},{"noFact":{"type":"warn_expo","target":"$c","maxAge":400}}],"p":0.2,"emit":{"type":"warn_expo"},"cooldown":400,"card":{"cls":"warn","w":3,"title":"「{civ}」的坐标正在变亮","body":"你看到的是{year}的光：{v.expoWhy}，「{civ}」在深空里越来越显眼（暴露度 {v.expo}）。{h.y}你曾{h.act}。如果赶到那里，也许能劝他们静默。"}},
 {"id":"warn.urge_silence","on":"arrival","subject":"here","when":[{"fact":{"type":"warn_expo","target":"$c","as":"w"}},{"noflag":"c.silent"},{"noFact":{"type":"urged","target":"$c","maxAge":300}}],"cls":"warn","text":{"show":["「{civ}」的坐标还在深空里发亮。你知道外面有什么在看。","在你的接收机上，「{civ}」的电磁辐射一年比一年亮。整片星空都听得见。","「{civ}」还没学会安静。你见过安静不下来的文明是什么下场。"]},"options":[{"id":"warn.silence","label":"劝他们静默","desc":"把你见过的打击讲给他们听。"}]},
 {"id":"warn.silence","on":"choice","outcomes":[{"p":0.65,"mod":[{"if":{"stat":"att","gte":0.3},"x":1.4},{"if":{"temper":["好战"]},"x":0.5}],"cls":"good","effects":[{"op":"silence"}],"emit":{"type":"urged"},"echo":true,"imp":3,"log":["听了{ship}的警告，「{civ}」关掉了所有对外广播，藏了起来。"],"result":"你把见过的二维画和熄灭的恒星讲给他们听。第二天，「{civ}」开始关闭对外广播。"},{"cls":"warn","emit":{"type":"urged"},"effects":[{"op":"imprint","v":-0.05}],"result":"他们礼貌地听完，然后告诉你：「我们不怕。」"}]},
-{"id":"warn.launch_seen","on":"fact:strike_launch","subject":"target","when":[{"calc":"help"}],"once":false,"card":{"cls":"bad","title":"你看见了一次发射","body":"你看到的是{f.y}的光：「{f.actor}」向「{civ}」射出了光粒，预计{f.d.arriveY}抵达。{h.y}你曾{h.act}。"}},
-{"id":"warn.evacuate","on":"arrival","subject":"here","when":[{"calc":"incoming"}],"cls":"bad","text":{"show":["传感器捕捉到一个以 0.99c 逼近的光点：光粒。它会在{v.arriveY}击中这里，只剩 {v.left}。"]},"options":[{"id":"warn.evac_go","label":"警告他们，帮他们撤离","desc":"来不及救所有人，但能让一部分人登上飞船。"}]},
-{"id":"warn.evac_go","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"evacuate"},{"op":"imprint","tag":"恩人","v":0.5}],"emit":{"type":"warned"},"echo":true,"imp":3,"log":["{ship}在光粒抵达前发出了警告，一部分「{civ}」人登上飞船逃走了。"],"result":"你把警报直接灌进了他们的每一个频道。一部分人登上了飞船，逃向最近的安全星系。"}]},
-{"id":"card.helped_extinct","on":"fact:extinct","dead":true,"when":[{"calc":"help"}],"once":"subject","card":{"cls":"bad","title":"「{civ}」灭绝了","body":"{h.y}你曾{h.act}。{f.y}，「{civ}」消失了：{f.d.cause}。"}},
-{"id":"card.home_flat","on":"report","when":[{"homeSeen":"flat"},{"calc":"home"}],"once":"world","card":{"now":true,"at":"here","cls":"bad","title":"太阳系被压平了","body":"你看到的是{v.homeYear}的光：太阳系已经是一幅二维的画。{v.flatYear}你再也没有家可以回了。"}},
-{"id":"card.home_lost","on":"report","when":[{"homeSeen":"lost"},{"calc":"home"}],"once":"world","card":{"now":true,"at":"here","cls":"bad","title":"母星易主","body":"你看到的是{v.homeYear}的光：太阳系的主人已经是「{v.homeOwner}」。地球文明失去了自己的家园。"}},
-{"id":"card.home_dead","on":"report","when":[{"homeSeen":"dead"},{"calc":"home"}],"once":"world","card":{"now":true,"at":"here","cls":"bad","title":"地球文明消失了","body":"你看到的是{v.homeYear}的光：太阳系里已经没有文明。{v.lastEvent}"}}
+{"id":"warn.launch_seen","on":"fact:strike_launch","subject":"target","when":[{"calc":"help"}],"once":false,"card":{"at":"fact","cls":"bad","w":5,"expire":{"y":"f.data.arrive","sys":"f.data.tsys"},"title":"你看见了一次发射","body":"你看到的是{f.y}的光：「{f.actor}」向「{civ}」射出了光粒，预计{f.d.arriveY}抵达。{h.y}你曾{h.act}。"}},
+{"id":"warn.evacuate","on":"arrival","subject":"any","group":"warn_evac","cooldownGroup":"evac","groupCooldown":150,"effects":[{"op":"hunt"}],"when":[{"calc":"incoming"},{"noFact":{"type":"warned","target":"$c","actor":"ship","known":"any","maxAge":200}}],"cls":"bad","text":{"show":["{v.seen}：「{v.shooter}」向「{civ}」（{v.target}）射出了光粒，它会在{v.arriveY}落地。{v.race}"]},"options":[{"id":"warn.evac_go","label":"{v.warnLabel}","desc":"{v.warnDesc}"}]},
+{"id":"warn.evac_go","on":"choice","outcomes":[{"cls":"good","effects":[{"op":"expo","at":"here","kind":"contact","v":0.15}],"emit":{"type":"warned","at":"here","actor":"ship","tags":["player","help"],"data":{"vsHome":"{v.vsHome}","shooter":"{v.shooter}","rel":"在光粒落下前警告他们","lead":"{v.leadN}"}},"echo":true,"imp":3,"unlock":[{"event":"warn.evac_arrive","delayV":"warnD","window":60}],"log":["{ship}向「{civ}」发出了光粒预警：「{v.shooter}」的光粒正在路上。"],"result":"{v.warnResult}"}]},
+{"id":"warn.evac_arrive","on":"pending","when":[{"fact":{"type":"warned","target":"$c","actor":"ship","known":"any","as":"w"}}],"once":"subject","echo":true,"nocap":true,"imp":3,"effects":[{"op":"evacuate"},{"op":"imprint","tag":"恩人","v":0.5}],"emit":{"type":"evacuated","target":"spawned","data":{"from":"{civ}"}},"text":{"log":["{ship}的警告比光粒早到了{w.d.lead}。「{civ}」[在最后的日子里|用尽了每一艘船]把一部分人送上了天：撤离舰队逃向了最近的安全星系。","警告到了。「{civ}」没有争论太久——他们见过黑暗森林。在光粒落下之前，一支撤离舰队离开了这里。"]}},
+{"id":"echo.evacuated.memory","on":"year","need":["evacuated"],"when":[{"fact":{"type":"evacuated","target":"$c","known":"any","inherit":false,"as":"x"}},{"since":{"as":"x","min":20}}],"p":0.02,"once":"subject","echo":true,"text":{"log":["「{civ}」的每一艘船上都挂着一块铭牌：纪念{x.y}那段比光粒早到了几个月的警告，和发出警告的{ship}。","「{civ}」的孩子们会背一句话：「光粒比光慢一点点——那一点点，就是我们。」"]}},
+{"id":"home.dossier","on":"arrival","subject":"here","cooldown":150,"when":[{"earth":"$c"},{"fact":{"type":["sided","mediated","mediate_failed","warned","retaliated","reparation","apology","questioned","refugee_spurned","faith_blessed","faith_truth","god","devil","gift_l","ally","starmap","hostile"],"actor":"ship"}},{"calc":"dossier"}],"cls":"warn","text":{"show":["母星的档案馆里，关于{ship}的卷宗又厚了一些：{v.dossier}","你还没走下舷梯，就有人递来一份卷宗——母星这些年按光速陆续收到的、关于你的消息：{v.dossier}"]}},
+{"id":"card.helped_extinct","on":"fact:extinct","dead":true,"when":[{"calc":"help"},{"stat":"v.helpRank","gte":5},{"any":[{"stat":"v.helpRank","gte":9},{"since":{"as":"h","max":1500}}]}],"once":"subject","card":{"cls":"bad","w":5,"title":"「{civ}」灭绝了","body":"{h.y}你曾{h.act}。{f.y}，「{civ}」消失了：{f.d.cause}。","short":"「{civ}」（{h.y}你曾{h.act}）{f.y}{f.d.cause}"}},
+{"id":"card.home_avenged","on":"report","when":[{"homeSeen":"flat"},{"calc":"home"},{"fact":{"type":"refugee_bcast","known":"any","as":"rb"}},{"flag":"v.avenged"}],"once":"world","forbid":[{"event":"card.home_flat","scope":"world"}],"card":{"now":true,"at":"here","cls":"bad","w":10,"major":true,"key":"home","title":"太阳系被压平了","body":"你看到的是{v.homeYear}的光：太阳系已经是一幅二维的画。{v.flatYear}{rb.y}，被母星清理过的文明的遗民「{rb.actor}」把太阳的坐标广播给了全宇宙——这一击，是他们等了很久的复仇。"}},
+{"id":"card.home_flat","on":"report","when":[{"homeSeen":"flat"},{"calc":"home"}],"once":"world","card":{"now":true,"at":"here","cls":"bad","w":10,"major":true,"key":"home","title":"太阳系被压平了","body":"你看到的是{v.homeYear}的光：太阳系已经是一幅二维的画。{v.flatYear}你再也没有家可以回了。"}},
+{"id":"card.home_lost","on":"report","when":[{"homeSeen":"lost"},{"calc":"home"}],"once":"world","card":{"now":true,"at":"here","cls":"bad","w":8,"major":true,"title":"母星易主","body":"你看到的是{v.homeYear}的光：太阳系的主人已经是「{v.homeOwner}」。地球文明失去了自己的家园。"}},
+{"id":"card.home_dead","on":"report","when":[{"homeSeen":"dead"},{"calc":"home"}],"once":"world","card":{"now":true,"at":"here","cls":"bad","w":9,"major":true,"title":"地球文明消失了","body":"你看到的是{v.homeYear}的光：太阳系里已经没有文明。{v.lastEvent}"}},
+{"id":"card.zero_broadcast","on":"report","when":[{"flag":"u.cosmicFlags.8"},{"calc":"dim"}],"once":"world","card":{"now":true,"at":"here","cls":"warn","w":9,"major":true,"key":"zero","title":"归零者的广播","body":"所有接收机在同一刻响了起来，信号来自宇宙的边缘：「归零者」发起「回归运动」，请求所有文明停止降维、停止降低光速，让宇宙回到十维的田园时代。此刻宇宙的维度是 {v.dim}，已经发生过 {v.dimN} 次降维打击。{v.dimYou}"}},
+{"id":"card.lowdim","on":"report","when":[{"flag":"u.cosmicFlags.15"},{"calc":"dim"}],"once":"world","card":{"now":true,"at":"here","cls":"bad","w":8,"major":true,"key":"lowdim","title":"低维化末期","body":"物理常数的漂移已经无法忽略：宇宙的维度跌到了 {v.dim}。越来越多的空间正在跌落，整个宇宙正在慢慢变成一幅画。{v.dimYou}"}},
+{"id":"destiny.domain","on":"arrival","subject":"here","when":[{"stat":"ship.destiny.id","eq":"domain"},{"stat":"ship.destiny.state","eq":"active"},{"stat":"c.tech","gte":100},{"stat":"att","gte":0.2},{"stat":"ship.songs","gte":1},{"noFact":{"type":"seal_refused","target":"$c","known":"any","maxAge":300}}],"cls":"warn","text":{"show":["「{civ}」的科技已经够得着光速本身了。他们的物理学家在研究一种把自己关起来的办法：把这片空间的光速降到每秒 16.7 公里。","「{civ}」的港口里流传着一份计划书：黑域。代价是与宇宙永久隔绝，回报是任何打击都再也进不来。"]},"options":[{"id":"destiny.seal","label":"劝他们建造黑域，并让你留在里面","desc":"你见过二向箔。如果他们答应，这就是你的终点：永远安全，永远出不去。"}]},
+{"id":"destiny.seal","on":"choice","outcomes":[{"p":0.4,"mod":[{"if":{"stat":"att","gte":0.5},"x":1.5},{"if":{"temper":["学者","官僚"]},"x":1.3},{"if":{"temper":["好战"]},"x":0.5}],"cls":"good","effects":[{"op":"seal"}],"emit":{"type":"sealed_in"},"imp":3,"log":["「{civ}」听了{ship}讲述的二维画，决定建造黑域。那艘飞船留在了里面。"],"result":"你讲了二维的画、熄灭的恒星和歌者随手哼出的那首歌。他们讨论了三年，最后同意了。"},{"cls":"dim","effects":[{"op":"imprint","v":-0.05}],"emit":{"type":"seal_refused"},"result":"他们听完，很客气地拒绝了：「把自己关起来，也是一种死法。」"}]}
 ]}
 </script>
 <script id="sim">
@@ -443,7 +454,7 @@ var SIM = (function () {
    * ===================================================================== */
   var EV = { list: [], byId: {}, byOn: {}, version: 0, loaded: false };
   var EV_CONDS = ['fact', 'noFact', 'stat', 'temper', 'earth', 'alive', 'rel', 'any', 'all', 'not', 'since', 'flag', 'noflag', 'homeSeen', 'shipKnows', 'near', 'here', 'tier', 'scene', 'diaspora', 'reach'];
-  var EV_OPS = ['add', 'set', 'expo', 'imprint', 'ship', 'rel', 'strike', 'protect', 'refugees', 'forbid', 'leak', 'pass', 'silence', 'evacuate'];
+  var EV_OPS = ['add', 'set', 'expo', 'imprint', 'ship', 'rel', 'strike', 'protect', 'refugees', 'forbid', 'leak', 'pass', 'silence', 'evacuate', 'hunt', 'seal'];
   function loadEvents(data) {
     var list = data.events || data;
     EV.list = []; EV.byId = {}; EV.byOn = {}; EV.version = data.version || 1;
@@ -703,7 +714,18 @@ var SIM = (function () {
       case 'leak': leakHome(u, ef.v || 0.5, ef.also || 0); return;
       case 'pass': if (c) c.passUntil = u.simYear + (ef.years || 200); return;
       case 'silence': if (c && !c.silent) { c.silent = true; c.exp *= 0.8; } return;
-      case 'evacuate': { var vc = ef.from === '$o' ? o : c; if (vc) { var ev2 = spawnRefugees(u, vc, '撤离舰队', true); if (ev2) ctx.spawned = ev2; } return; }
+      case 'seal': {   // 命运「加入黑域」：他们封闭自己，你在里面（结局）
+        if (!c || !c.alive || c.blackDomain) return;
+        c.blackDomain = true; c.silent = true;
+        u.systems.forEach(function (s2) { if (s2.owner === c.id) { clearExpo(s2); logSys(u, s2, '「' + c.name + '」应一艘外来飞船的请求建造了黑域：光速降到 16.7 km/s。那艘飞船留在了里面。', 3); pushState(u, s2); } });
+        var stxt = '「' + c.name + '」的黑域在你身后合拢。光速降到每秒 16.7 公里，星空在几天之内暗了下去，最后只剩一团吞掉光线的黑。' + u.ship.name + '在船上过了 ' + u.ship.shipYears.toFixed(1) + ' 年，宇宙过了 ' + Math.floor(u.time) + ' 年。从现在起，你和他们永远安全，也永远出不去了。';
+        u.ship.sealedIn = c.id; endDestiny(u, 'won', stxt, { civ: c.name }); killShip(u, stxt); u.ship.dead.sealed = true; return;
+      }
+      case 'hunt': {   // 议会表决通过的清理：光粒当场发射（你在场，看见了闪光）
+        var hv = ctx.v.hunt; if (!hv) return; var HA = u.civs[hv.a], HT = u.systems[hv.t]; if (!HA || !HA.alive || !HT || !c) return;
+        scheduleStrike(u, '光粒', HT, HA.id, hv.dist / 0.99, '', huntWhy(u, HA, c, HT, hv.dist)); return;
+      }
+      case 'evacuate': { var vc = ef.from === '$o' ? o : c; if (vc) { var ev2 = spawnRefugees(u, vc, '撤离舰队', vc.tag === '神' && attOf(u, vc) > 0.3 ? 0.25 : 0.08); if (ev2) ctx.spawned = ev2; } return; }   // 信徒听从神的警告：撤离得更多
     }
   }
 
@@ -777,11 +799,18 @@ var SIM = (function () {
     if (e.echo) { if (ctx.c) ctx.c.lastEcho = ctx.now; u.echoRecent.push(ctx.now); }
     if (e.card) {
       var cs = e.card.at === 'here' ? u.ship.at : e.card.at === 'fact' && ctx.f && ctx.f.sys != null ? ctx.f.sys : ctx.c ? ctx.c.home : 0;
-      u.cards.push({ id: e.id, c: ctx.c ? ctx.c.id : null, y: ctx.now, sys: cs, cls: e.card.cls || 'bad', title: evText(u, e, e.card.title, ctx, sk + 'T'), t: evText(u, e, e.card.body, ctx, sk + 'B'), shown: false, now: !!e.card.now });
+      var card = { id: e.id, c: ctx.c ? ctx.c.id : null, y: ctx.now, sys: cs, cls: e.card.cls || 'bad', title: evText(u, e, e.card.title, ctx, sk + 'T'), t: evText(u, e, e.card.body, ctx, sk + 'B'), shown: false, now: !!e.card.now, seq: u.cards.length };
+      if (e.card.w != null) card.w = e.card.w;
+      if (e.card.major) card.major = true;
+      if (e.card.key) card.key = e.card.key;
+      if (e.card.short) card.short = evText(u, e, e.card.short, ctx, sk + 'S');
+      if (e.card.expire) { var ey = evPath(u, e.card.expire.y, ctx), es = evPath(u, e.card.expire.sys, ctx); if (ey != null && es != null) card.exp = { y: ey, sys: es }; }
+      u.cards.push(card);
     }
     (e.unlock || []).forEach(function (ul) {
       var dl = ul.delay || [0, 0], dd = dl[0] + (dl[1] - dl[0]) * hrand(u, 'ul' + ul.event, sk, Math.floor(ctx.now));
       if (ul.light && ctx.c && ctx.o) dd += civDist(u, ctx.c, ctx.o.home);
+      if (ul.delayV && ctx.v[ul.delayV] != null) dd += +ctx.v[ul.delayV];   // 例如光速警告在路上走的年数
       u.pend.push({ ev: ul.event, c: ctx.c ? ctx.c.id : null, o: ctx.o ? ctx.o.id : null, f: emitted ? emitted.id : ctx.f ? ctx.f.id : null, from: ctx.now + dd, until: ctx.now + dd + (ul.window || 800) });
     });
     (e.forbid || []).forEach(function (fb) { evEffect(u, { op: 'forbid', event: fb.event || fb, scope: fb.scope || 'subject' }, ctx); });
@@ -855,7 +884,7 @@ var SIM = (function () {
       }
       (e.options || []).forEach(function (op) {
         if (op.when && !op.when.every(function (q) { return evCond(u, q, ctx); })) return;
-        if (E) { E.options.push(opt('@' + op.id, evFill(u, op.label, ctx, 'lbl'), evFill(u, op.desc || '', ctx, 'desc'))); E.evctx = E.evctx || {}; E.evctx['@' + op.id] = { c: ctx.c ? ctx.c.id : null, F: ctx.F }; }
+        if (E) { E.options.push(opt('@' + op.id, evFill(u, op.label, ctx, 'lbl'), evFill(u, op.desc || '', ctx, 'desc'))); E.evctx = E.evctx || {}; E.evctx['@' + op.id] = { c: ctx.c ? ctx.c.id : null, F: ctx.F, v: ctx.v }; }
       });
       if (e.scene && E) E.scene = e.scene;
     });
@@ -865,7 +894,7 @@ var SIM = (function () {
     var e = EV.byId[id.slice(1)]; if (!e) return { t: '……', cls: 'dim' };
     if (!(E.evctx || {})[id]) return { t: '时机已经过去了。', cls: 'dim' };   // 这次到访没有提供这个选项
     var info = E.evctx[id], c = info.c != null ? u.civs[info.c] : null;
-    var ctx = evCtx(u, c, null, null); ctx.F = info.F || {};
+    var ctx = evCtx(u, c, null, null); ctx.F = info.F || {}; if (info.v) for (var vk in info.v) ctx.v[vk] = info.v[vk];   // 父事件算好的 {v.*}（距离、警告在路上的年数……）
     if (e.when) for (var i = 0; i < e.when.length; i++) if (!evCond(u, e.when[i], ctx)) return { t: '时机已经过去了。', cls: 'dim' };
     var outs = e.outcomes || [{}], k = hrand(u, e.id, evSubjKey(ctx), Math.floor(u.time * 10));
     for (var j = 0; j < outs.length; j++) {
@@ -883,7 +912,7 @@ var SIM = (function () {
   }
 
   // 玩家帮过某文明一脉的「最重要」那次（用于间接责任的因果句和卡片）
-  var HELP_RANK = { god: 9, ally: 8, gift_l: 7, teach: 6, trade: 5, gift_s: 4, learn: 3, courier: 3, relic: 2, scholar: 2, starmap: 2 };
+  var HELP_RANK = { god: 9, ally: 8, gift_l: 7, warned: 7, teach: 6, trade: 5, gift_s: 4, learn: 3, courier: 3, relic: 2, scholar: 2, starmap: 2 };
   function helpFact(u, c, before) {
     var best = null;
     lineage(u, c).forEach(function (k) {
@@ -907,14 +936,14 @@ var SIM = (function () {
     return best;
   }
   // 流亡 / 撤离舰队：从受害文明分出一支，落脚在最近的安全星系
-  function spawnRefugees(u, victim, suffix, keepParent) {
+  function spawnRefugees(u, victim, suffix, share) {
     if (!victim) return null;
     var from = u.systems[victim.home];
-    var safe = u.systems.filter(function (t) { return t.owner == null && !t.dead && !t.flat && !t.targeted && t.id !== 0 && u.D[from.id][t.id] > 8; })
+    var safe = u.systems.filter(function (t) { return t.owner == null && !t.dead && !t.flat && !t.targeted && t.id !== 0 && u.D[from.id][t.id] > 8 && !u.flats.some(function (f) { return DM.hyp(t.x - f.x, t.y - f.y) <= f.rmax + 3; }); })
       .sort(function (a, b) { return u.D[from.id][a.id] - u.D[from.id][b.id]; })[0];
     if (!safe) return null;
     var d = { id: u.civs.length, root: victim.root, name: victim.root + suffix, color: COLORS[u.civs.length % COLORS.length], home: safe.id,
-      pop: Math.max(0.01, victim.pop * 0.05 + 0.01), tech: Math.max(victim.tech, victim.peakTech * 0.9), peakTech: victim.peakTech, res: 1, exp: Math.min(1, victim.exp + 0.2), stab: 0.5, alive: true, born: u.simYear,
+      pop: Math.max(0.01, victim.pop * (share || 0.05) + 0.01), tech: Math.max(victim.tech, victim.peakTech * 0.9), peakTech: victim.peakTech, res: 1, exp: Math.min(1, victim.exp + 0.2), stab: 0.5, alive: true, born: u.simYear,
       era: eraOf(Math.max(victim.tech, victim.peakTech * 0.9)), legends: victim.legends.slice(), att: victim.att, attYear: victim.attYear, tag: victim.tag, giftYear: victim.giftYear, interstellarYear: victim.interstellarYear,
       endYear: null, endCause: null, formerNames: [victim.name], parent: victim.id, diaspora: true, refugee: true, silent: true, temper: victim.temper, legacy: [] };
     u.civs.push(d); safe.owner = d.id; d.res = cap(u, d);
@@ -930,7 +959,7 @@ var SIM = (function () {
   function evCalc(u, k, ctx) {
     var c = ctx.c, v = ctx.v;
     switch (k) {
-      case 'help': { if (!c) return false; var h = helpFact(u, c, ctx.now); if (!h) return false; ctx.F.h = h; return true; }
+      case 'help': { if (!c) return false; var h = helpFact(u, c, ctx.now); if (!h) return false; ctx.F.h = h; v.helpRank = HELP_RANK[h.type] || 0; return true; }
       case 'why': {
         var f = ctx.F.f && ctx.F.f.type === 'cleared' ? ctx.F.f : ctx.F.b && ctx.F.b.cause != null ? u.facts[ctx.F.b.cause] : null;
         v.why = ''; if (!f) return true;
@@ -955,7 +984,7 @@ var SIM = (function () {
       case 'expo': {
         if (!c) return false; var best = null;
         u.systems.forEach(function (s) { if (s.owner === c.id && (!best || s.exposure > best.exposure)) best = s; });
-        if (!best || best.exposure < 1.2) return false;
+        if (!best || best.exposure < (c.religion && civHasType(u, c, ['faith_founded']) ? 0.8 : 1.2)) return false;   // 信奉你的文明：更早预警
         v.expo = best.exposure.toFixed(1); var dk = domKind(best.ex); v.expoWhy = EXPO_WHY[dk] || '信号';
         return true;
       }
@@ -965,6 +994,39 @@ var SIM = (function () {
         v.flatYear = H.flatYear != null ? yr(H.flatYear) + '，二向箔落在那里。' : '';
         var ec = null; H.timeline.forEach(function (e) { if (e.y <= hs.sy) ec = e; });
         v.lastEvent = ec ? '最后的记载：' + ec.t : '';
+        // 太阳被压平，是不是遗民广播的坐标引来的（打击原因 = 交战广播，且广播早于压平）
+        v.avenged = false;
+        if (H.flatYear != null) u.strikes.forEach(function (st) { if (st.target === 0 && st.type === '二向箔' && st.done && !st.wasted && st.cause && st.cause.kind === 'war') v.avenged = (u.fType.refugee_bcast || []).some(function (f) { return f.y <= st.launch; }); });
+        return true;
+      }
+      case 'faith': {
+        // 宗教线的前情：创教神迹、信徒的圣物、走过的路——让后续文本引用前一阶段的细节
+        if (!c) return false;
+        var FQ = function (t) { return factQuery(u, { type: t, target: '$c', known: 'any' }, ctx); };
+        var fo = FQ('faith_founded')[0], gd = factQuery(u, { type: 'god', target: '$c', actor: 'ship', known: 'any' }, ctx)[0];
+        var fromDevil = fo && fo.data.fromDevil, rit = c.ritual || '驱魔节';
+        v.sign = fromDevil ? '那副' + rit + '的面具' : gd && gd.data.how === 'miracle' ? '夜空里的第二个太阳' : '一艘从天而降的发光小船';
+        var sch = FQ('faith_schism')[0], hw = FQ('faith_holywar')[0], mt = FQ('faith_martyr')[0], pr = FQ('faith_prophet')[0], pres = FQ('prophet_resolved')[0],
+          pg = FQ('faith_pilgrim')[0], bl = FQ('faith_blessed'), rf = FQ('faith_reform')[0], pc = FQ('faith_peace')[0];
+        v.relic = mt ? '殉道者的遗骨' : fromDevil ? '当年' + rit + '的面具' : pg ? '一捧「神降之地」的土' : gd && gd.data.how === 'miracle' ? '一幅「第二个太阳」的壁画' : '一尊发光的小船神像';
+        var past = [];
+        if (sch) past.push([sch.y, sch.data.why === 'devil' ? '神变成恶魔那一夜的分裂' : '「' + ((c.sects && c.sects[0]) || '守望派') + '」与「' + ((c.sects && c.sects[1]) || '离弃派') + '」的分裂']);
+        if (hw) past.push([hw.y, '一场以你为名的圣战']);
+        if (mt) past.push([mt.y, '一位望着你离去方向死去的殉道者']);
+        if (pc) past.push([pc.y, '你亲手平息的那场战争']);
+        if (pr) past.push([pr.y, '冒充你的「' + shipBase(u) + '再临」' + (pres ? (pres.data.how === 'expose' ? '（被你揭穿）' : '（被你默认）') : '')]);
+        if (pg) past.push([pg.y, '通往「神降之地」的朝圣']);
+        if (bl.length) past.push([bl[bl.length - 1].y, '你' + yr(bl[bl.length - 1].y) + '的祝福']);
+        if (rf) past.push([rf.y, '把「等待」改成「寻找」的宗教改革']);
+        past.sort(function (a, b) { return a[0] - b[0]; });
+        var ps = past.slice(-3).map(function (x) { return x[1]; });
+        v.past = ps.join('、'); v.after = ps.length ? '经历过' + v.past + '之后，' : ''; v.pastS = ps.length ? '他们经历过' + v.past + '。' : '';
+        return true;
+      }
+      case 'dim': {
+        v.dim = dimOf(u).toFixed(3); v.dimN = u.dimStrikes;
+        var mine = (u.fType.cleared || []).filter(function (f) { return f.data.weapon === '二向箔' && f.data.player && f.y <= ctx.now; }).length;
+        v.dimYou = mine ? '其中 ' + mine + ' 次降维，是被你的航迹、通讯或广播引来的。' : '这些降维打击里，没有一次能追溯到你——至少档案里没有。';
         return true;
       }
       case 'age': {
@@ -973,15 +1035,92 @@ var SIM = (function () {
       }
       case 'dist': { if (!c) return false; var d = civDist(u, c, u.ship.at); v.distN = d.toFixed(0); v.dist = '距此 ' + d.toFixed(0) + ' 光年'; return true; }
       case 'incoming': {
+        // 在途的光粒：你（按光延迟）已经看见了发射闪光——此刻所在星系，或出发时所在的星系——
+        // 而且从这里发出的光速警告还能比光粒先到。光粒 0.99c，警告 1c：差的那 1%，就是撤离的时间。
         if (!c) return false;
+        var tr = u.ship.trips[u.ship.trips.length - 1], here = u.ship.at;
+        // 情形 2：你恰好停在一个「猎手」文明的星系里，他们的议会刚刚表决通过、要清理 c（光粒随事件效果 hunt 当场发射）
+        var hc0 = u.systems[here].owner != null ? u.civs[u.systems[here].owner] : null;
+        if (hc0 && hc0 !== c && hc0.alive && !hc0.blackDomain && !c.blackDomain && hc0.tech >= 75 && hc0.tech - c.tech >= 8 && hc0.stab > 0.3) {
+          var rr0 = u.rel[relKey(hc0.id, c.id)], dd0 = minDist(u, hc0, c);
+          if ((!rr0 || rr0.type !== '贸易') && dd0 < 1e8 && detects(u, hc0, c, dd0) && hrand(u, 'council', hc0.id + '>' + c.id, Math.floor(u.time)) < 0.2) {
+            var bs0 = ownedSystems(u, c).filter(function (s) { return !s.targeted && !s.flat && !s.dead; }).sort(function (x, y) { return y.exposure - x.exposure; })[0];
+            if (bs0) { v.hunt = { a: hc0.id, t: bs0.id, dist: dd0 }; v.council = 1; }
+          }
+        }
+        if (v.hunt) {
+          var A0 = u.civs[v.hunt.a], T0 = u.systems[v.hunt.t], fs0 = null;
+          u.systems.forEach(function (s) { if (s.owner === A0.id && (fs0 == null || u.D[s.id][T0.id] < u.D[fs0][T0.id])) fs0 = s.id; });
+          var arr0 = Math.floor(u.time) + Math.max(1, Math.ceil(Math.max(v.hunt.dist, u.D[fs0][T0.id]) / 0.99 - 1e-9)), dW0 = u.D[here][T0.id], lead0 = arr0 - (u.time + dW0);
+          if (lead0 < 0.05) { delete v.hunt; }
+          else {
+            var vh = isEarthLine(u, A0);
+            v.arriveY = yr(arr0); v.target = T0.name; v.shooter = A0.name; v.vsHome = vh ? 1 : ''; v.warnD = dW0; v.distN = dW0.toFixed(0);
+            v.leadN = lead0 < 1 ? Math.max(1, Math.round(lead0 * 365)) + ' 天' : lead0.toFixed(1) + ' 年';
+            v.seen = '你停靠在' + u.systems[here].name + '的时候，「' + A0.name + '」的议会刚刚表决通过：深空监听网锁定了 ' + v.hunt.dist.toFixed(0) + ' 光年外的「' + c.name + '」。发射就在今天';
+            v.race = '光粒比光慢 1%。如果你现在向那里发出光速警告，它会比光粒早到 ' + v.leadN + '。' + (vh ? '开枪的是母星。' : '');
+            v.warnLabel = '向「' + c.name + '」发出光速警告'; v.warnDesc = '警告要走 ' + v.distN + ' 年，比光粒早到 ' + v.leadN + '。「' + A0.name + '」会知道是谁走漏了消息。' + (vh ? '这是在出卖母星。' : '');
+            v.warnResult = '你当着「' + A0.name + '」的面，把警告射向了「' + c.name + '」。它要在深空里走 ' + v.distN + ' 年，比光粒早到 ' + v.leadN + '。' + (vh ? '母星迟早会知道是谁走漏了消息。' : '「' + A0.name + '」的哨舰把你请出了港口。');
+            return true;
+          }
+        }
         for (var i = 0; i < u.strikes.length; i++) {
           var st = u.strikes[i]; if (st.done || st.fromSys == null || st.arrive <= u.time) continue;
           var tg = u.systems[st.target]; if (tg.owner !== c.id) continue;
-          if (u.time + 1e-6 < st.launch + u.D[st.fromSys][u.ship.at]) continue;    // 发射的闪光还没传到这里
-          var left = st.arrive - u.time; v.arriveY = yr(st.arrive); v.left = left < 1 ? Math.max(1, Math.round(left * 365)) + ' 天' : left.toFixed(1) + ' 年';
+          var seenHere = u.time + 1e-6 >= st.launch + u.D[st.fromSys][here];
+          var seenFrom = tr && tr.from !== here && tr.depart + 1e-6 >= st.launch + u.D[st.fromSys][tr.from];
+          if (!seenHere && !seenFrom) continue;
+          var dW = u.D[here][st.target], lead = st.arrive - (u.time + dW);
+          if (lead < 0.05) continue;
+          var A = u.civs[st.by], vsHome = A && isEarthLine(u, A);
+          v.arriveY = yr(st.arrive); v.target = tg.name; v.shooter = A ? A.name : '某个文明'; v.vsHome = vsHome ? 1 : '';
+          v.warnD = dW; v.leadN = lead < 1 ? Math.max(1, Math.round(lead * 365)) + ' 天' : lead.toFixed(1) + ' 年'; v.distN = dW.toFixed(0);
+          v.seen = seenHere ? (st.fromSys === here ? '就在你眼前' : '你看到了' + yr(st.launch) + '的闪光') : '出发前，你看到了' + yr(st.launch) + '的闪光';
+          if (here === st.target) {
+            v.race = '你比它先到了 ' + v.leadN + '。';
+            v.warnLabel = '警告他们，帮他们撤离'; v.warnDesc = '来不及救所有人，但能让一部分人登上飞船。';
+            v.warnResult = '你把警报直接灌进了他们的每一个频道。离光粒落地还有 ' + v.leadN + '：够一部分人登上飞船，逃向最近的安全星系。';
+          } else {
+            v.race = '光粒比光慢 1%。如果你现在向那里发出光速警告，它会比光粒早到 ' + v.leadN + '。' + (vsHome ? '开枪的是母星。' : '');
+            v.warnLabel = '向「' + c.name + '」发出光速警告'; v.warnDesc = '警告要走 ' + v.distN + ' 年；它会比光粒早到 ' + v.leadN + '。' + (vsHome ? '这是在出卖母星的一次清理行动，母星的档案会记下来。' : '警告信号也会照亮你此刻的位置。');
+            v.warnResult = '警告已经发出，它要在深空里走 ' + v.distN + ' 年，比光粒早到 ' + v.leadN + '。你不会知道结果——除非多年以后，那道光再传回来。' + (vsHome ? '母星迟早会知道是谁走漏了消息。' : '');
+          }
           return true;
         }
         return false;
+      }
+      case 'dossier': {
+        // 母星档案：只列母星（按光延迟）已经知道、而你还没在档案里读到过的条目
+        if (!c) return false;
+        var seenD = u.ship.dossierSeen = u.ship.dossierSeen || {}, items = [];
+        var DT = { sided: function (f, n) { return '你在「' + n + '」最孤立的时候站在了他们一边——档案员在你的名字旁边写了「叛徒」，又划掉了'; },
+          mediated: function (f, n) { return '你替母星和「' + n + '」' + (f.data.how === 'treaty' ? '签下了正式的和约' : '斡旋了停火') + '，那份协议被挂在外交部的大厅里'; },
+          mediate_failed: function (f, n) { return '你试图调停「' + n + '」与母星的战争，被请出了他们的星系'; },
+          warned: function (f, n) { return f.data.vsHome ? '母星的光粒还在路上，你却向「' + n + '」发出了警告。军方要求以叛国罪审判你，议会吵了十年，最后不了了之' : '你抢在光粒之前警告了「' + n + '」'; },
+          retaliated: function (f, n) { return '你向全宇宙广播了「' + n + '」的坐标'; },
+          reparation: function (f, n) { return '你把飞船上的全部技术资料交给了「' + n + '」，作为迟到的赔偿'; },
+          apology: function (f, n) { return '你替母星向「' + n + '」道了歉'; },
+          questioned: function (f, n) { return '你质问「' + n + '」为什么要开枪，他们的回答被抄进了卷宗：「先开枪的才能活下来」'; },
+          refugee_spurned: function (f, n) { return '你替母星向「' + n + '」道歉，换来的是被打穿的货舱'; },
+          faith_blessed: function (f, n) { return '「' + n + '」把你奉为神明，而你又一次祝福了他们'; },
+          faith_truth: function (f, n) { return '你亲口告诉「' + n + '」的信徒：你不是神'; },
+          god: function (f, n) { return '你在「' + n + '」扮成了神' + (f.data.how === 'miracle' ? '，让他们的夜空出现了第二个太阳' : ''); },
+          devil: function (f, n) { return f.data.how === 'betray' ? '你向全宇宙喊出了信奉你的「' + n + '」的坐标' : '「' + n + '」把你当成了恶魔'; },
+          gift_l: function (f, n) { return '你把母星几百年的科学一股脑儿留给了「' + n + '」'; },
+          ally: function (f, n) { return '你以母星的名义和「' + n + '」结了盟'; },
+          starmap: function (f, n) { return '你把星图交给了「' + n + '」——太阳的坐标也在上面'; },
+          hostile: function (f, n) { return '你' + String(f.data.rel || '与他们结怨').replace('他们', '「' + n + '」'); } };
+        (u.fWho.ship || []).forEach(function (f) {
+          if (!DT[f.type] || seenD[f.id] || f.y > ctx.now || !civKnows(u, c, f, ctx.now)) return;
+          var tc = civOf(u, f.target); items.push({ f: f, t: yr(f.y) + '，' + DT[f.type](f, tc ? tc.name : '某个文明') });
+        });
+        if (!items.length) return false;
+        items.forEach(function (x) { seenD[x.f.id] = 1; });
+        var byK = {}, merged = [];   // 同一件事对同一个文明做了几次：只留最近一条，注明次数
+        items.forEach(function (x) { var k = x.f.type + '|' + x.f.target + '|' + (x.f.data.how || ''); if (byK[k]) { byK[k].n++; byK[k].f = x.f; byK[k].t = x.t; } else { byK[k] = { f: x.f, t: x.t, n: 1 }; merged.push(byK[k]); } });
+        items = merged.map(function (x) { return { f: x.f, t: x.t + (x.n > 1 ? '（前后 ' + x.n + ' 次）' : '') }; });
+        v.dossier = items.slice(-4).map(function (x) { return x.t; }).join('；') + '。' + (items.length > 4 ? '（还有 ' + (items.length - 4) + ' 条更早的记录。）' : '');
+        return true;
       }
     }
     return false;
@@ -1174,11 +1313,7 @@ var SIM = (function () {
         var expo = 0; bs.forEach(function (s) { expo = Math.max(expo, s.exposure); });
         if (rnd(u) < 0.0018 * (0.3 + a.exp) * (1 + 2 * expo)) {
           var target = bs.slice().sort(function (x, y) { return y.exposure - x.exposure; })[0];
-          var why = dist <= detectRange(a) ? { kind: 'detect' } : a.mapKnown && a.mapKnown[target.id] && target.exposure < 1 ? { kind: 'map' } : { kind: domKind(target.ex) };
-          why.who = '「' + a.name + '」'; why.see = u.simYear; why.emit = u.simYear - dist; why.gift = b.giftYear;
-          var enb = enablerFact(u, a, u.simYear); if (enb) why.help = enb.id;
-          if (why.kind === 'map') { var tf = factQuery(u, { type: 'told', target: ck(a), known: 'any' }, evCtx(u, null, null, null)); if (tf.length) why.told = tf[tf.length - 1].id; }
-          scheduleStrike(u, '光粒', target, a.id, dist / 0.99, '', why);
+          scheduleStrike(u, '光粒', target, a.id, dist / 0.99, '', huntWhy(u, a, b, target, dist));
           continue;
         }
       }
@@ -1207,6 +1342,14 @@ var SIM = (function () {
         if (rnd(u) < 0.003) r.type = '贸易';
       }
     }
+  }
+  // 黑暗森林清理的原因（写进打击记录，供因果句和史实使用）
+  function huntWhy(u, a, b, target, dist) {
+    var why = dist <= detectRange(a) ? { kind: 'detect' } : a.mapKnown && a.mapKnown[target.id] && target.exposure < 1 ? { kind: 'map' } : { kind: domKind(target.ex) };
+    why.who = '「' + a.name + '」'; why.see = u.simYear; why.emit = u.simYear - dist; why.gift = b.giftYear;
+    var enb = enablerFact(u, a, u.simYear); if (enb) why.help = enb.id;
+    if (why.kind === 'map') { var tf = factQuery(u, { type: 'told', target: ck(a), known: 'any' }, evCtx(u, null, null, null)); if (tf.length) why.told = tf[tf.length - 1].id; }
+    return why;
   }
   function power(c) { return DM.pow(c.tech, 2) * DM.pow(c.pop, 0.3) * (0.3 + c.stab); }
   function battle(u, a, b, dist) {
@@ -1287,14 +1430,19 @@ var SIM = (function () {
   function scheduleStrike(u, type, target, by, delay, note, cause) {
     if (target.targeted || target.flat || (target.dead && target.owner == null)) return;   // 已经死寂的星系不再值得打
     target.targeted = true;
-    var st = { type: type, target: target.id, by: by, launch: u.simYear, arrive: u.simYear + Math.max(1, Math.round(delay)), note: note || '', cause: cause || null };
+    // 武器以 0.99c 飞行：抵达年份向上取整（四舍五入会让 50 光年内的打击比光还早到，违反 t ≥ d/c）
+    var A = by !== 'singer' ? u.civs[by] : null, fs = null;
+    if (A) {   // 从离目标最近的己方星系发射；飞行时间不能短于这段距离 / 0.99c
+      u.systems.forEach(function (s) { if (s.owner === A.id && (fs == null || u.D[s.id][target.id] < u.D[fs][target.id])) fs = s.id; });
+      if (fs == null) fs = A.home;
+      delay = Math.max(delay, u.D[fs][target.id] / 0.99);
+    }
+    var st = { type: type, target: target.id, by: by, launch: u.simYear, arrive: u.simYear + Math.max(1, Math.ceil(delay - 1e-9)), note: note || '', cause: cause || null };
     u.strikes.push(st);
-    var A = by !== 'singer' ? u.civs[by] : null;
     if (A) {   // 文明发射的光粒：发射处的闪光以光速传开（歌者的发射在星图之外，看不见）
-      var fs = null; u.systems.forEach(function (s) { if (s.owner === A.id && (fs == null || u.D[s.id][target.id] < u.D[fs][target.id])) fs = s.id; });
-      st.fromSys = fs != null ? fs : A.home;
+      st.fromSys = fs;
       var V = target.owner != null ? u.civs[target.owner] : null;
-      if (V) addFact(u, 'strike_launch', { sys: st.fromSys, actor: ck(A), target: ck(V), data: { arriveY: yr(st.arrive), weapon: type } });
+      if (V) addFact(u, 'strike_launch', { sys: st.fromSys, actor: ck(A), target: ck(V), data: { arriveY: yr(st.arrive), weapon: type, arrive: st.arrive, tsys: target.id, si: u.strikes.length - 1 } });
     }
     return st;
   }
@@ -1374,6 +1522,7 @@ var SIM = (function () {
       var n = ownedSystems(u, c).length;
       c.pop *= 1 - 1 / n; c.stab -= 0.3;
       s.owner = null; s.ruins.push(c.name); (s.ruinTech = s.ruinTech || []).push(c.peakTech);
+      s.dead = true; s.habitable = false;   // A4：先标记死寂，再写史实——史实会触发事件（遗民舰队找落脚点），不能把刚熄灭的恒星当成「安全星系」
       logSys(u, s, '一枚' + src + '「光粒」击中了这颗恒星。「' + c.name + '」在这里的一切瞬间化为灰烬。', 3);
       var Ab = st.by !== 'singer' ? u.civs[st.by] : null;
       if (Ab && Ab.alive && u.systems[Ab.home].owner === Ab.id) logSys(u, u.systems[Ab.home], '「' + Ab.name + '」清理了一个' + (st.cause && st.cause.kind === 'map' ? '星图上标着的' : st.cause && st.cause.kind === 'detect' ? '被监听网发现的' : '暴露坐标的') + '文明（「' + c.name + '」）。', 2);
@@ -1429,6 +1578,7 @@ var SIM = (function () {
   function flatten(u, s, f) {
     var c = s.owner != null ? u.civs[s.owner] : null;
     s.flat = true; s.dead = true; s.habitable = false; s.flatYear = u.simYear; s.flatBy = f.id;
+    u.strikes.forEach(function (st) { if (st.target === s.id && !st.done) st.wasted = true; });   // 还在路上的打击只会飞进一幅画里
     if (c && c.alive) {
       var n = ownedSystems(u, c).length;
       c.pop *= 1 - 1 / n; s.owner = null; s.ruins.push(c.name); (s.ruinTech = s.ruinTech || []).push(c.peakTech);
@@ -1497,7 +1647,8 @@ var SIM = (function () {
   var TRAIL = 0.35;         // 每次曲率出发 / 抵达留下的航迹暴露度（会随时间衰减）
   var SHIP_NAMES = ['萤火号', '拾光号', '远行者号', '归途号', '长夜号', '溯洄号', '望舒号', '启明号', '孤帆号', '回声号'];
   function isWarp(mode) { return String(mode).charAt(0) === 'w'; }
-  function supplyCost(tc) { return tc.warp ? 4 + tc.d / 50 : tc.ext / 100; }
+  // 补给（B1）：曲率 = 启动 4 + 距离/25 + 速度档附加（0.9999c +2，0.99999c +4：γ 越大舰员老得越慢，代价也越高）；常规推进 = 外部年数/100
+  function supplyCost(tc) { return tc.warp ? 4 + tc.d / 25 + (tc.beta >= 0.99999 ? 4 : tc.beta >= 0.9999 ? 2 : 0) : tc.ext / 100; }
   function tripCalc(u, toId, mode) {
     var d = u.D[u.ship.at][toId], warp = isWarp(mode);
     var beta = warp ? +String(mode).slice(1) : +mode;
@@ -1574,7 +1725,7 @@ var SIM = (function () {
     var rep = arrivalReport(u, toId, trip);
     rep.notes = notes.concat(rep.notes || []);
     u._rep = rep; rep.encounter = encounter(u, toId, trip); u._rep = null;
-    if (u.ship.dead) { rep.death = true; rep.deathCause = u.ship.dead.cause; }
+    if (u.ship.dead) { rep.death = true; rep.deathCause = u.ship.dead.cause; destinyCheck(u, rep, u.ship.at); }
     trip.crewAge = crewAge(u); trip.shipAfter = u.ship.shipYears; trip.detained = rep.encounter.detained || 0;
     return { trip: trip, report: rep };
   }
@@ -1606,7 +1757,7 @@ var SIM = (function () {
     }
     var el = death ? tEnd - t0 : years;   // 没出事就按整数年记（避免 299.9999 显示成 299）
     u.ship.shipYears += el; u.ship.bio += el * bioRate;
-    u.ship.supply = Math.max(0, u.ship.supply - el / 100 * (ctx.drain || 1.2));
+    u.ship.supply = Math.max(0, u.ship.supply - el / 100 * (ctx.drain != null ? ctx.drain : ctx.cryo ? 2.5 : 1.2));   // 冬眠维持：每百年 2.5（B1：冬眠不是免费时光机）
     if (death) killShip(u, deathText(u, death.why, { awake: !ctx.cryo, moving: false, to: u.systems[sysId].name, text: death.text }));
     return { el: el, death: death };
   }
@@ -1624,15 +1775,17 @@ var SIM = (function () {
     var rep = arrivalReport(u, at, trip);
     rep.notes = notes.concat(rep.notes || []);
     u._rep = rep; rep.encounter = encounter(u, at, trip); u._rep = null;
-    if (u.ship.dead) { rep.death = true; rep.deathCause = u.ship.dead.cause; }
+    if (u.ship.dead) { rep.death = true; rep.deathCause = u.ship.dead.cause; destinyCheck(u, rep, u.ship.at); }
     trip.crewAge = crewAge(u); trip.shipAfter = u.ship.shipYears; trip.detained = rep.encounter.detained || 0;
     return { trip: trip, report: rep };
   }
   function deathReport(u, sysId, trip, notes) {
     var s = u.systems[sysId];
-    return { sysId: sysId, sysName: s.name, death: true, deathCause: u.ship.dead ? u.ship.dead.cause : '', trip: trip, first: false, lines: [], remote: [], events: [],
+    var dr = { sysId: sysId, sysName: s.name, death: true, deathCause: u.ship.dead ? u.ship.dead.cause : '', trip: trip, first: false, lines: [], remote: [], events: [],
       notes: notes || [], caused: [], big: [], cosmic: u.cosmicEvents.slice(u.ship.cosmicSeen), dim: dimOf(u), dimStrikes: u.dimStrikes, canAct: false,
       encounter: { sysId: sysId, tier: '终结', forced: [], options: [] } };
+    destinyCheck(u, dr, sysId);
+    return dr;
   }
   function deadResult(u) {
     var t = u.ship.trips[u.ship.trips.length - 1] || { from: u.ship.at, to: u.ship.at, arrive: u.time, ext: 0, ship: 0, bio: 0, d: 0, label: '' };
@@ -1661,9 +1814,9 @@ var SIM = (function () {
 
   /* ---------- 你留下的痕迹：玩家行为一律写成史实（actor = ship），回响由事件库按史实生成 ---------- */
   var REL_DESC = { gift_s: '留下少量技术', gift_l: '留下大量技术', god: '假扮神明', devil: '以恶魔的样子降临', ally: '结盟', trade: '通商', teach: '交换技术', learn: '求教',
-    courier: '替他们送信', relic: '在他们那里展出飞船', scholar: '让他们研究飞船', hostile: '结怨', detained: '被他们扣押', starmap: '交出星图', told: '讲述旅程' };
+    courier: '替他们送信', relic: '在他们那里展出飞船', scholar: '让他们研究飞船', hostile: '结怨', detained: '被他们扣押', starmap: '交出星图', told: '讲述旅程', warned: '光粒预警' };
   var ACT_DESC = { gift_s: '给他们留下少量技术', gift_l: '给他们留下大量技术', god: '在他们面前假扮神明', devil: '以恶魔的样子降临在他们面前', ally: '与他们结盟', trade: '与他们通商',
-    teach: '与他们交换技术', learn: '向他们求教', courier: '替他们送信', relic: '在他们的博物馆里展出飞船', scholar: '让他们研究你的飞船', hostile: '与他们结怨', detained: '被他们扣押过', starmap: '向他们交出星图', told: '给他们讲述旅程' };
+    teach: '与他们交换技术', learn: '向他们求教', courier: '替他们送信', relic: '在他们的博物馆里展出飞船', scholar: '让他们研究你的飞船', hostile: '与他们结怨', detained: '被他们扣押过', starmap: '向他们交出星图', told: '给他们讲述旅程', warned: '在光粒落下前向他们发出警告' };
   function legacyAdd(u, c, kind, data) {
     if (!c) return null;
     data = data || {}; if (!data.rel) data.rel = REL_DESC[kind] || '来访';
@@ -1696,20 +1849,112 @@ var SIM = (function () {
   }
 
   // 大事件卡片：事件库写进 u.cards（带发生地点和年份），按光延迟到达飞船时才显示；母星状态类卡片在到达时判断
-  function bigEvents(u, here) {
+  /* 导演配额（A2）：卡片少而重。
+   *   1) 过期：预警的对象已经（按光延迟）灭亡，或光粒已经（按光延迟）落地 → 不弹
+   *   2) 低信息量：卡片说的是你此刻所在星系的文明——到访报告本身已经讲了 → 不弹
+   *   3) 重复：同一个 key（如「母星成了猎手」）一局只弹一次；同一文明一份报告只留最重的一张
+   *   4) 聚合：同一份报告里多个「你帮过的文明灭绝了」合成一张
+   *   5) 配额：有「重大」卡（母星压平 / 易主 / 消失、归零者广播、低维化末期）时只弹重大卡（最多 2 张）；否则按权重最多 2 张
+   * 没弹出的卡记进 rep.bigFolded（新增字段），UI 可以折叠显示「另有 N 件事已记入史册」。 */
+  var CARD_W = { bad: 3, warn: 2, good: 2 };
+  function bigEvents(u, here, rep) {
     evArrive(u, 'report', {});
-    var out = [];
+    var cand = [], folded = [];
+    u.cardKeys = u.cardKeys || {};
+    var localCiv = {};
+    if (rep) { if (rep.now && rep.now.civId != null) localCiv[rep.now.civId] = 1; if (rep.then && rep.then.civId != null) localCiv[rep.then.civId] = 1; }
+    function fold(cd, why) { folded.push({ cls: cd.cls, title: cd.title, t: cd.t, ev: cd.id, why: why }); }
     u.cards.forEach(function (cd) {
-      if (cd.shown || out.length >= 5) return;          // 一次最多 5 张，其余留到下次
+      if (cd.shown) return;
       var d = u.D[cd.sys][here];
       if (!cd.now && u.time + 1e-6 < cd.y + d) return;
       cd.shown = true;
       // 过期的预警：等光到你这里时，你已经能看到对方灭亡了，「也许还来得及」的卡片就不再弹出
-      var cc = cd.cls === 'warn' && cd.c != null ? u.civs[cd.c] : null;
-      if (cc && !cc.alive && cc.endYear != null && u.time + 1e-6 >= cc.endYear + u.D[cc.home][here]) return;
-      out.push({ cls: cd.cls, title: cd.title, t: cd.t + (!cd.now && d > 1 ? '（这消息的光走了 ' + d.toFixed(0) + ' 年才到你这里）' : ''), ev: cd.id });
+      var cc = (cd.cls === 'warn' || cd.exp) && cd.c != null ? u.civs[cd.c] : null;
+      if (cc && !cc.alive && cc.endYear != null && u.time + 1e-6 >= cc.endYear + u.D[cc.home][here]) return fold(cd, 'stale');
+      if (cd.exp && cd.exp.sys != null && u.time + 1e-6 >= cd.exp.y + u.D[cd.exp.sys][here]) return fold(cd, 'stale');
+      if (!cd.now && cd.c != null && localCiv[cd.c]) return fold(cd, 'local');
+      if (cd.key && u.cardKeys[cd.key]) return fold(cd, 'dup');
+      // 你亲眼看见了这次发射、还发出了警告：这张「你看见了一次发射」比你知道的还少
+      if (cd.id === 'warn.launch_seen' && cd.c != null && (u.fType.warned || []).some(function (f) { return f.actor === 'ship' && f.target === 'civ:' + cd.c && f.y >= cd.y - 1e-6; })) return fold(cd, 'dup');
+      cand.push({ cd: cd, d: d, w: cd.w != null ? cd.w : CARD_W[cd.cls] || 2 });
     });
+    // 同一文明只留最重的一张；同 key 只留一张
+    cand.sort(function (a, b) { return b.w - a.w || b.cd.y - a.cd.y || a.cd.seq - b.cd.seq; });
+    var seenC = {}, seenK = {}, keep = [], helped = [];
+    cand.forEach(function (x) {
+      var cd = x.cd;
+      if (cd.id === 'card.helped_extinct') { helped.push(x); return; }
+      if (cd.key && seenK[cd.key]) return fold(cd, 'dup');
+      if (cd.c != null && seenC[cd.c] && !cd.major) return fold(cd, 'dup');
+      if (cd.key) seenK[cd.key] = 1; if (cd.c != null) seenC[cd.c] = 1;
+      keep.push(x);
+    });
+    helped = helped.filter(function (x) { if (seenC[x.cd.c]) { fold(x.cd, 'dup'); return false; } return true; });
+    if (helped.length === 1) keep.push(helped[0]);
+    else if (helped.length > 1) {   // 聚合：你帮过的几个文明在同一段光里一起消失
+      var names = helped.map(function (x) { return x.cd.short || x.cd.t; });
+      keep.push({ w: 5 + Math.min(2, helped.length - 1), d: helped[0].d, cd: { id: 'card.helped_extinct', cls: 'bad', seq: helped[0].cd.seq, y: helped[0].cd.y, now: true, agg: helped.length,
+        title: '你帮过的 ' + helped.length + ' 个文明消失了', t: names.join('；') + '。' } });
+    }
+    keep.sort(function (a, b) { return b.w - a.w || b.cd.y - a.cd.y; });
+    var majors = keep.filter(function (x) { return x.cd.major; });
+    var show = majors.length ? majors.slice(0, 2) : keep.slice(0, 2);
+    keep.forEach(function (x) { if (show.indexOf(x) < 0) fold(x.cd, 'quota'); });
+    var out = show.map(function (x) {
+      var cd = x.cd; if (cd.key) u.cardKeys[cd.key] = 1;
+      return { cls: cd.cls, title: cd.title, t: cd.t + (!cd.now && x.d > 1 ? '（这消息的光走了 ' + x.d.toFixed(0) + ' 年才到你这里）' : ''), ev: cd.id, major: !!cd.major, w: x.w, agg: cd.agg || 0 };
+    });
+    if (rep) rep.bigFolded = folded;
     return out;
+  }
+  /* =====================================================================
+   *  命运（B4）：开局或中途可选的终局目标。达成 / 失败都会生成一份结局（rep.ending / interact 结果的 ending），给客户端做结局页和分享卡。
+   *  选择命运不消耗随机数、不改变物理史；只有「加入黑域」会解锁一个接触选项（事件 destiny.domain）。
+   * ===================================================================== */
+  var DESTINIES = [
+    { id: 'zero', title: '等到归零者', goal: '活着听到归零者的「回归运动」广播（宇宙累计降维 8 次）。', fail: '舰员在那之前死去。' },
+    { id: 'singer', title: '找到歌者', goal: '读到歌者的两段签名：凝视被二向箔压平的画，或在被歌者抹掉的废墟里考古。', fail: '舰员在那之前死去。' },
+    { id: 'earth', title: '让地球活到纪元 3000 年', goal: '你看到的光里，纪元 3000 年的太阳系仍属于地球文明（按光延迟判定）。', fail: '你先看到了太阳系被压平、易主或熄灭，或舰员在那之前死去。' },
+    { id: 'domain', title: '加入黑域', goal: '先亲眼凝视一幅二维的画，再说服一个科技 ≥ 100、对你友好的文明建造黑域，并把你留在里面——永远安全，永远出不来。', fail: '舰员在那之前死去。' }];
+  function destinyDef(id) { for (var i = 0; i < DESTINIES.length; i++) if (DESTINIES[i].id === id) return DESTINIES[i]; return null; }
+  function chooseDestiny(u, id) {
+    var d = destinyDef(id); if (!d) return null;
+    if (u.ship.destiny && u.ship.destiny.state !== 'active') return u.ship.destiny;   // 已经有结局了
+    if (u.ship.dead) return null;
+    u.ship.destiny = { id: d.id, title: d.title, goal: d.goal, fail: d.fail, state: 'active', since: u.time, progress: '' };
+    return u.ship.destiny;
+  }
+  function destinyOf(u) { return u.ship.destiny || null; }
+  function endDestiny(u, state, text, extra) {
+    var D = u.ship.destiny; if (!D || D.state !== 'active') return;
+    var y = Math.floor(u.time), sy = u.ship.shipYears, age = crewAge(u);
+    D.state = state; D.endY = u.time;
+    D.ending = { id: D.id, title: D.title, state: state, y: y, shipYears: +sy.toFixed(1), crewAge: +age.toFixed(1), trips: u.ship.trips.length, dim: +dimOf(u).toFixed(3),
+      head: state === 'won' ? '命运达成：' + D.title : '命运落空：' + D.title, text: text,
+      share: '我在《相对论宇宙》里' + (state === 'won' ? '完成了「' + D.title + '」' : '没能「' + D.title + '」') + '：' + u.ship.name + '，船上 ' + sy.toFixed(1) + ' 年，宇宙 ' + y + ' 年，' + u.ship.trips.length + ' 段航程，舰员 ' + age.toFixed(0) + ' 岁。', delivered: false };
+    if (extra) for (var k in extra) D.ending[k] = extra[k];
+  }
+  function takeEnding(u) { var D = u.ship.destiny; if (!D || !D.ending || D.ending.delivered) return null; D.ending.delivered = true; return D.ending; }
+  function destinyCheck(u, rep, sysId) {
+    var D = u.ship.destiny;
+    if (D && D.state === 'active') {
+      var y = Math.floor(u.time), nm = u.ship.name;
+      if (u.ship.dead) endDestiny(u, 'lost', u.ship.dead.cause + '「' + D.title + '」没有等到结局。');
+      else if (D.id === 'zero') {
+        D.progress = '宇宙已降维 ' + u.dimStrikes + ' / 8 次';
+        if (u.cosmicFlags[8]) endDestiny(u, 'won', yr(u.time) + '，' + nm + '的接收机收到了来自宇宙边缘的广播：归零者请求所有文明停止降维，让宇宙回到十维的田园时代。宇宙已经降维 ' + u.dimStrikes + ' 次，维度 ' + dimOf(u).toFixed(3) + '。船上过去了 ' + u.ship.shipYears.toFixed(1) + ' 年，宇宙过去了 ' + y + ' 年。你等到了。');
+      } else if (D.id === 'singer') {
+        var n = u.ship.songs || 0; D.progress = '歌者的签名 ' + Math.min(2, n) + ' / 2';
+        if (n >= 2) endDestiny(u, 'won', '第二段签名和第一段一模一样：极简、重复，像一首随手哼出的歌。你终于确定，那个清理者真的存在，而且它根本不在乎。' + nm + '是这片星空里少数几个知道这件事、而且还活着的东西。');
+      } else if (D.id === 'earth') {
+        var hs = homeSeenState(u);
+        D.progress = '你看到的母星：' + yr(Math.max(0, hs.sy)) + (hs.kind === 'ok' ? '，仍是地球文明' : '');
+        if (hs.kind !== 'ok' && hs.sy > 0) endDestiny(u, 'lost', '你看到的是' + yr(hs.sy) + '的光：' + (hs.kind === 'flat' ? '太阳系已经是一幅二维的画' : hs.kind === 'lost' ? '太阳系的主人已经是「' + (hs.st.name || '别人') + '」' : '太阳系里已经没有文明') + '。地球没能活到纪元 3000 年。');
+        else if (hs.kind === 'ok' && hs.sy >= 3000) endDestiny(u, 'won', '你看到的光来自' + yr(hs.sy) + '：太阳系里仍然是「' + (hs.st.name || '地球文明') + '」。' + nm + '出发时的那个文明，活过了三千年的黑暗森林。');
+      } else if (D.id === 'domain') D.progress = (u.ship.songs ? '你见过二维画了；' : '先去凝视一幅二维画；') + '寻找科技 ≥ 100、对你友好的文明';
+    }
+    if (rep) { rep.destiny = D ? { id: D.id, title: D.title, goal: D.goal, state: D.state, progress: D.progress || '' } : null; var en = takeEnding(u); if (en) rep.ending = en; }
   }
   function checkGoals(u, rep, sysId) {
     var G = u.ship.goals, out = [];
@@ -1801,8 +2046,9 @@ var SIM = (function () {
       news.forEach(function (e) { if (e.you && !seenYou[e.y + e.t] && !u.ship.echoSeen[e.y + e.t]) { seenYou[e.y + e.t] = 1; u.ship.echoSeen[e.y + e.t] = 1; rep.caused.push(t.name + '（远方的光）· ' + yr(e.y) + '：' + e.t); } });
       rep.remote.push({ name: t.name, d: d, t: '你看到的是 ' + yr(seenYear) + ' 的光（延迟 ' + d.toFixed(0) + ' 年）：' + head + '。' + (ev ? ' ' + ev : ' 没有大事。') });
     });
-    rep.big = bigEvents(u, sysId);
+    rep.big = bigEvents(u, sysId, rep);
     checkGoals(u, rep, sysId);
+    destinyCheck(u, rep, sysId);
     rep.cosmic = u.cosmicEvents.slice(u.ship.cosmicSeen); u.ship.cosmicSeen = u.cosmicEvents.length;
     rep.dim = dimOf(u); rep.dimStrikes = u.dimStrikes;
     rep.canAct = !!(curCiv && curCiv.alive);
@@ -1879,6 +2125,7 @@ var SIM = (function () {
     var fired = evArrive(u, 'arrival', { c: c, E: E, rep: u._rep, scene: E.scene });
     var tail = E.options.filter(function (o) { return o.id === '广播坐标' || o.id === '离开'; });
     E.options = E.options.filter(function (o) { return tail.indexOf(o) < 0; });
+    if (fired.some(function (x) { return x.e.group === 'faith_scene'; })) E.forced = E.forced.filter(function (f) { return !f.bell; });   // 信徒场景自己会讲「神回来了」
     evPresent(u, E, u._rep, fired);
     E.options = E.options.concat(tail);
     if (u.ship.dead) E.options = [];
@@ -1909,7 +2156,7 @@ var SIM = (function () {
       var left = s.ruins.length - (s.dug || 0);
       if (left > 0) {
         var rtn = (s.ruinTech || [])[s.dug || 0] || 10;
-        E.tier = '遗迹'; E.options.push(opt('考古', '考古发掘', '在「' + s.ruins[s.dug || 0] + '」的废墟里寻找遗物、补给和他们消失的原因。' + (rtn >= 55 ? '这是一个星际文明的遗迹，可能还有自动防御在运转。' : '')));
+        E.tier = '遗迹'; E.options.push(opt('考古', '考古发掘', '在「' + s.ruins[s.dug || 0] + '」的废墟里寻找遗物、补给和他们消失的原因。他们的峰值科技是 ' + rtn.toFixed(0) + '（你 ' + u.ship.tech.toFixed(0) + '）' + (rtn > u.ship.tech ? '：能找回比你更先进的技术。' : '：大概只有物资。') + (rtn >= 55 ? '这是一个星际文明的遗迹，自动防御可能还在运转（风险约 ' + Math.round(100 * (0.15 + (rtn - 55) * 0.006)) + '%）。' : '')));
       } else E.tier = s.ruins.length ? '遗迹（已发掘）' : '无人';
       E.options.push(bcast);
       E.options.push(opt('离开', '继续', ''));
@@ -1920,9 +2167,16 @@ var SIM = (function () {
     // 母星：地球一脉的文明永远欢迎你回家
     if (isEarthLine(u, c)) {
       E.tier = '母星'; E.scene = '归乡';
-      E.forced.push({ cls: 'good', t: wake ? '你在' + s.name + '的轨道上醒来。' + N + '的港口早就为你留好了泊位。' : N + '认出了飞船的识别码。' + tpick(u, 'home', ['整个星系都在欢迎你回家。', '港口的灯一盏盏亮起来，像是在说：欢迎回家。', '他们说，你的名字还写在发射场的纪念碑上。']) });
-      if (c.tech > u.ship.tech + 1) { var hg = (c.tech - u.ship.tech) * 0.6; u.ship.tech += hg; E.forced.push({ cls: 'good', t: '母星把这些年的成果装进了飞船：飞船科技 +' + hg.toFixed(1) + '。' }); }
-      if (u.ship.supply < 99.5) { E.forced.push({ cls: 'good', t: '补给和维修已全部补满（' + supTxt(100 - u.ship.supply) + '）。' }); u.ship.supply = 100; }
+      // B1：只有太阳系的母星本体才补满补给、送科技（送科技有 150 年冷却）；殖民地 / 分家的地球文明只能给少量补给，科技 300 年一次、只给一小部分
+      var body = sysId === 0; E.homeBody = body;
+      E.forced.push({ cls: 'good', t: wake ? '你在' + s.name + '的轨道上醒来。' + N + '的港口早就为你留好了泊位。' : N + '认出了飞船的识别码。' + (body ? tpick(u, 'home', ['整个星系都在欢迎你回家。', '港口的灯一盏盏亮起来，像是在说：欢迎回家。', '他们说，你的名字还写在发射场的纪念碑上。']) : '这里是地球文明的一个殖民地，离太阳 ' + u.D[sysId][0].toFixed(0) + ' 光年。') });
+      var htY = u.ship.homeTechY, cd = body ? 150 : 300;
+      if (c.tech > u.ship.tech + 1 && (htY == null || u.simYear - htY >= cd)) {
+        var hg = (c.tech - u.ship.tech) * (body ? 0.6 : 0.25); u.ship.tech += hg; u.ship.homeTechY = u.simYear;
+        E.forced.push({ cls: 'good', t: (body ? '母星把这些年的成果装进了飞船' : '殖民地的工程师尽力给飞船升级了一部分系统') + '：飞船科技 +' + hg.toFixed(1) + '。' });
+      } else if (c.tech > u.ship.tech + 1) E.forced.push({ cls: 'dim', t: '上一次升级才过去 ' + Math.floor(u.simYear - htY) + ' 年，' + (body ? '母星' : '殖民地') + '没有新东西能装进飞船了。' });
+      if (body) { if (u.ship.supply < 99.5) { E.forced.push({ cls: 'good', t: '补给和维修已全部补满（' + supTxt(100 - u.ship.supply) + '）。' }); u.ship.supply = 100; } }
+      else { var cs0 = u.ship.supply; u.ship.supply = Math.min(100, u.ship.supply + 20); E.forced.push({ cls: 'good', t: '殖民地的仓库不大，只能分给你一点（' + supTxt(u.ship.supply - cs0) + '）。想补满，得回太阳。' }); }
       E.options.push(opt('讲述', '讲述你的旅程', '把一路的见闻和星图交给母星。'));
       E.options.push(bcast);
       E.options.push(opt('离开', '再次出发', ''));
@@ -1933,7 +2187,7 @@ var SIM = (function () {
       E.options.push(opt('降临', '降临接触', '直接降落在他们面前。巨大的文化冲击：可能被奉为神，也可能被当成恶魔。社会会剧烈动荡。'));
     } else if (tier === '落后') {
       if (c.tag === '恶魔' && a < -0.3) E.forced.push({ cls: 'warn', t: '他们的经书里记载着一个「天外来的恶魔」——就是你。地面上的人在恐慌中躲藏。' });
-      if (c.tag === '神' && a > 0.3) E.forced.push({ cls: 'good', t: '神庙的钟声响彻全城：' + (c.religion ? '「' + c.religion + '」' : '他们') + '的神回来了。' });
+      if (c.tag === '神' && a > 0.3) E.forced.push({ cls: 'good', t: '神庙的钟声响彻全城：' + (c.religion ? '「' + c.religion + '」' : '他们') + '的神回来了。', bell: true });
       E.options.push(opt('少量技术', '留下少量技术', '点拨一下医学、农业和基础物理。进步温和（约 +5），社会基本稳得住。'));
       E.options.push(opt('大量技术', '留下大量技术', '倾囊相授到接近你的水平（' + u.ship.tech.toFixed(0) + '）。他们会连跳几个时代，但社会剧烈震荡、扩张欲上升；更早进入电波时代，也就更早暴露。'));
       if (c.tech < 35) E.options.push(opt('假扮神明', '假扮神明', '用你的科技制造神迹，引发一场宗教。他们会更团结，也会更好战。'));
@@ -1943,12 +2197,17 @@ var SIM = (function () {
         E.forced.push({ cls: 'bad', t: (c.tag ? memo(u, c) : '他们把你当成「可疑的外来飞船」。') + '舰队锁定了你，限你立即离开。' });
         E.expelled = true;
       } else {
+        // 流亡者 / 后代多半继承了祖先的科技，常常和你「对等」：他们也会认出你（事件库 recognize）
+        var rf0 = (c.diaspora || c.refugee || c.parent != null) ? evArrive(u, 'recognize', { c: c, E: E, rep: u._rep, scene: '对等' }) : [];
+        if (rf0.length) { evPresent(u, E, u._rep, rf0); E.recog = true; }
+        else {
         if (c.exp > 0.7 && a < 0.2 && rnd(u) < 0.4) { E.tense = true; E.forced.push({ cls: 'warn', t: N + '扩张欲很强，他们的战舰包围了你。任何举动都可能擦枪走火。' }); }
         var hs = seenHome(u, sysId);
         E.options.push(opt('交换技术', '交换技术', '双方各取所长，都有小幅进步。' + (c.exp > 0.6 && !c.knowsHome ? '对方扩张欲强，可能借机摸清你的来历。' : '')));
         E.options.push(opt('贸易', '贸易', '交换货物、补充补给' + (hs.name && !hs.flat ? '，并替母星「' + hs.name + '」开一条贸易航线（这是你在这里看到的母星名字，光走了 ' + u.D[sysId][0].toFixed(0) + ' 年）。' : '。')));
         if (a >= 0.3) E.options.push(opt('结盟', '结盟', '他们对你' + attWord(a) + '，愿意和你及你的母星结盟，并分享技术。'));
         E.options.push(opt('对峙', '警惕对峙', '什么都不交出，保持距离离开。他们会把你记成可疑者。'));
+        }
       }
     } else { // 先进
       var pass = c.passUntil != null && c.passUntil > u.simYear;
@@ -2040,8 +2299,13 @@ var SIM = (function () {
     return E;
   }
 
-  // 执行玩家选择，返回 {t, cls}
+  // 执行玩家选择，返回 {t, cls}；命运在这一步达成 / 落空时附带 ending（新增字段）
   function interact(u, sysId, id) {
+    var r = interact0(u, sysId, id);
+    destinyCheck(u, null, sysId); var en = takeEnding(u); if (en && r) r.ending = en;
+    return r;
+  }
+  function interact0(u, sysId, id) {
     var s = u.systems[sysId], c = s.owner != null ? u.civs[s.owner] : null, E = u.enc || {}, r;
     if (u.ship.dead) return { t: '……', cls: 'dim' };
     // 只能选这次到访实际提供的选项（URL 计划或脚本强行指定别的选项时拒绝，避免「和母星结盟」之类的错位史实）
@@ -2050,14 +2314,18 @@ var SIM = (function () {
     if (id === '离开') return { t: E.expelled ? '你在对方舰队的注视下离开。' : tpick(u, 'leave' + sysId, ['你没有打扰他们，悄悄离开。', '你关掉信标，像来时一样安静地离开。', '你记下最后一组数据，调转航向。']), cls: 'dim' };
     if (id === '凝视') {
       s.gazed = true;
+      u.ship.songs = (u.ship.songs || 0) + 1;
       if (!u.ship.knowsSinger) { u.ship.knowsSinger = true; u.ship.tech += 1; shipLog(u, '在' + s.name + '的二维画中发现歌者的签名'); }
       return { t: '在平面边缘，你读出了一段不属于任何本地文明的结构：极简、重复、像一首随手哼出的歌。那是一个清理者留下的签名——它看到了这里的坐标，顺手做了清理。它也许根本不记得这件事。（你确认了「歌者」的存在，飞船科技 +1）', cls: 'warn' };
     }
     if (id === '广播坐标') {
       addExpo(s, 3, 'bcast'); logSys(u, s, '一段指向这里的坐标广播射向了全宇宙。', 3); shipLog(u, '在' + s.name + '向全宇宙广播坐标');
       var heard = c && c.alive && c.tech >= 35; if (heard) { imprint(u, c, '入侵者', -0.7); legacyAdd(u, c, 'hostile', { rel: '广播了他们的坐标' }); }
+      // 神出卖了自己的信徒：信奉你的文明听见了这段广播 → 神变成了恶魔（事件库 rel.god_to_devil 接手）
+      var betray = heard && c.religion && civHasType(u, c, ['faith_founded']);
+      if (betray) legacyAdd(u, c, 'devil', { how: 'betray', what: '向全宇宙喊出了他们的坐标' });
       var dS = singerDist(u, s);
-      return { t: '你把' + s.name + '的坐标广播了出去。这道光要走大约 ' + Math.round(dS) + ' 年才会被星图之外的清理者看到；如果它动手，武器还要再飞差不多这么久。' + (heard ? '「' + c.name + '」截获了广播，从此把你当成入侵者。' : '') + '最好别留在这里。', cls: 'bad' };
+      return { t: '你把' + s.name + '的坐标广播了出去。这道光要走大约 ' + Math.round(dS) + ' 年才会被星图之外的清理者看到；如果它动手，武器还要再飞差不多这么久。' + (heard ? '「' + c.name + '」截获了广播，从此把你当成入侵者。' : '') + (betray ? '他们的祭司听懂了这段广播：他们的神，向黑暗森林喊出了他们的名字。' : '') + '最好别留在这里。', cls: 'bad' };
     }
     if (id === '威慑') {
       if (!c || !c.alive) return { t: '……', cls: 'dim' };
@@ -2072,10 +2340,17 @@ var SIM = (function () {
       var idx = s.dug || 0; s.dug = idx + 1;
       var rt = (s.ruinTech || [])[idx] || 10, nm = s.ruins[idx], rc = findRuinCiv(u, nm);
       var how = rc ? (rc.alive ? '他们并没有灭绝，只是离开了这里——如今叫「' + rc.name + '」，仍在别处生活。' : '最后的记录写着：' + yr(rc.endYear) + '，' + rc.endCause + '。') : '最后的记录残缺不全，只剩下一段反复播放的告别。';
-      if (rt >= 55 && rnd(u) < 0.25) { u.ship.supply = Math.max(0, u.ship.supply - 10); return { t: '「' + nm + '」是一个星际文明（科技 ' + rt.toFixed(0) + '），它的自动防御至今还在运转。你触发了警报，只能仓皇撤离，飞船受损（补给 −10）。' + how, cls: 'bad' }; }
-      u.ship.supply = Math.min(100, u.ship.supply + 10);
-      if (rt > u.ship.tech) { var g = Math.min(10, (rt - u.ship.tech) * 0.45 + 1); u.ship.tech += g; shipLog(u, '在' + s.name + '的遗迹中找回失落技术 +' + g.toFixed(1)); return { t: '「' + nm + '」曾经比你先进（科技 ' + rt.toFixed(0) + '）。你从废墟里找回了一部分他们的技术（飞船科技 +' + g.toFixed(1) + '）和一些还能用的物资（补给 +10）。' + how, cls: 'good' }; }
-      return { t: '你在「' + nm + '」的废墟里找到了壁画、乐器和一些还能用的物资（补给 +10，科技 ' + rt.toFixed(0) + '，没有你用得上的技术）。' + how, cls: '' };
+      // B1：收益与遗迹主人的峰值科技挂钩——越先进的废墟越值钱，也越危险；能把飞船科技推到超过你自己的水平
+      var danger = rt >= 55 ? 0.15 + (rt - 55) * 0.006 : 0;
+      if (rt >= 55 && rnd(u) < danger) { var dmg = Math.round(10 + (rt - 55) / 3); u.ship.supply = Math.max(0, u.ship.supply - dmg); return { t: '「' + nm + '」是一个星际文明（科技 ' + rt.toFixed(0) + '），它的自动防御至今还在运转。你触发了警报，只能仓皇撤离，飞船受损（补给 −' + dmg + '）。' + how, cls: 'bad' }; }
+      // 废墟主人的历史决定你找到什么：你的信徒、被歌者抹掉的、被母星清理的
+      var extra = '', lin = rc ? lineage(u, rc) : [], has = function (t, actor) { return (u.fType[t] || []).some(function (f) { return lin.indexOf(f.target) >= 0 && (!actor || f.actor === actor); }); };
+      if (rc && has('faith_founded')) extra = '最深的一层地宫里供着一艘小船的神像，船身上的编号和你的飞船一模一样。他们到最后都在等你。';
+      else if (rc && /歌者/.test(rc.endCause || '')) { extra = '废墟边缘的仪器还记录着那一击：极简、重复，像一首随手哼出的歌。'; if (!u.ship.knowsSinger) { u.ship.knowsSinger = true; shipLog(u, '在' + s.name + '的废墟里读到歌者的签名'); extra += '你确认了「歌者」的存在。'; } u.ship.songs = (u.ship.songs || 0) + 1; }
+      else if (rc && (u.fType.cleared || []).some(function (f) { var A = civOf(u, f.actor); return lin.indexOf(f.target) >= 0 && A && isEarthLine(u, A); })) extra = '他们最后的广播里反复念着一个坐标：太阳。';
+      var sg = Math.round(8 + rt / 5), sp = u.ship.supply; u.ship.supply = Math.min(100, u.ship.supply + sg);
+      if (rt > u.ship.tech) { var g = (rt - u.ship.tech) * 0.5 + 1; u.ship.tech += g; shipLog(u, '在' + s.name + '的遗迹中找回失落技术 +' + g.toFixed(1)); return { t: '「' + nm + '」曾经比你先进（科技 ' + rt.toFixed(0) + '）。你从废墟里找回了一部分他们的技术（飞船科技 +' + g.toFixed(1) + '）和还能用的物资（' + supTxt(u.ship.supply - sp) + '）。' + extra + how, cls: 'good' }; }
+      return { t: '你在「' + nm + '」的废墟里找到了壁画、乐器和一些还能用的物资（' + supTxt(u.ship.supply - sp) + '；他们的科技 ' + rt.toFixed(0) + '，没有你用得上的技术）。' + extra + how, cls: '' };
     }
     if (!c || !c.alive) return { t: '这里没有可以交流的对象。', cls: 'dim' };
     var gap = c.tech - u.ship.tech, a = attOf(u, c), N = '「' + c.name + '」';
@@ -2102,7 +2377,7 @@ var SIM = (function () {
       case '降临':
         c.tech += 2; c.stab = Math.max(0, c.stab - 0.25); addExpo(s, 0.1, 'contact');
         if (rnd(u) < 0.65) { imprint(u, c, '神', 0.7); legacyAdd(u, c, 'god', { how: 'descend' }); r = { t: '你走出飞船的那一刻，整个部落跪倒在地。你成了他们的神。旧的首领和祭司体系在一夜之间崩塌。', cls: 'warn' }; logSys(u, s, '一个「天神」从天而降，「' + c.name + '」的旧秩序崩塌。', 3); }
-        else { imprint(u, c, '恶魔', -0.6); legacyAdd(u, c, 'devil', { how: 'descend' }); r = { t: '他们尖叫着逃散，有人向你投掷石块。在他们的传说里，你会是一个天外来的恶魔。', cls: 'bad' }; logSys(u, s, '一个「天外恶魔」降临，「' + c.name + '」陷入恐慌。', 3); }
+        else { imprint(u, c, '恶魔', -0.6); legacyAdd(u, c, 'devil', { how: 'descend', what: '是恶魔的模样' }); r = { t: '他们尖叫着逃散，有人向你投掷石块。在他们的传说里，你会是一个天外来的恶魔。', cls: 'bad' }; logSys(u, s, '一个「天外恶魔」降临，「' + c.name + '」陷入恐慌。', 3); }
         return r;
       case '少量技术':
         var d1 = Math.max(0, Math.min(5, u.ship.tech - 2 - c.tech)); c.tech += d1; c.stab = Math.max(0, c.stab - 0.05); c.giftYear = u.simYear;
@@ -2178,13 +2453,14 @@ var SIM = (function () {
         return { t: '你接下了委托：把信和货送到 ' + M.toName + '。预付报酬已到手（' + supTxt(u.ship.supply - sp2) + '）。', cls: 'good' };
       case '拾荒':
         if (rnd(u) < 0.2) { imprint(u, c, '可疑者', -0.2); E.expelled = true; return { t: '巡逻舰发现了你。他们没开火，只是把你像赶苍蝇一样赶出了星系。', cls: 'warn' }; }
-        var sg2 = Math.min(5, 1 + Math.max(0, gap) * 0.1); u.ship.tech += sg2; u.ship.supply = Math.min(100, u.ship.supply + 25);
-        return { t: '你在他们的轨道垃圾带里捡到了报废的反应堆芯和几块还能用的芯片（飞船科技 +' + sg2.toFixed(1) + '，补给 +25）。', cls: 'good' };
+        var sg2 = Math.min(8, 1 + Math.max(0, gap) * 0.15), sc2 = Math.round(15 + Math.min(25, Math.max(0, gap) * 0.4)), sp3 = u.ship.supply; u.ship.tech += sg2; u.ship.supply = Math.min(100, u.ship.supply + sc2);
+        return { t: '你在他们的轨道垃圾带里捡到了报废的反应堆芯和几块还能用的芯片（飞船科技 +' + sg2.toFixed(1) + '，' + supTxt(u.ship.supply - sp3) + '）。他们越先进，扔掉的东西越值钱。', cls: 'good' };
     }
     return { t: '……', cls: 'dim' };
   }
 
   return { loadEvents: loadEvents, EV: EV, factQuery: factQuery, shipKnows: shipKnows, hrand: hrand, homeCiv: homeCiv,
+    DESTINIES: DESTINIES, chooseDestiny: chooseDestiny, destinyOf: destinyOf,
     createUniverse: createUniverse, simulateTo: simulateTo, travel: travel, hibernate: hibernate, tripCalc: tripCalc, interact: interact, dimOf: dimOf, flatR: flatR, EXPO_MAX: EXPO_MAX, singerDist: singerDist, encounter: encounter, attOf: attOf, attWord: attWord, TAG_DESC: TAG_DESC,
     remember: remember, stateAt: stateAt, eraLabel: eraLabel, eraOf: eraOf, fmtPop: fmtPop, lifeLine: lifeLine, snapshot: snapshot,
     typeInfo: typeInfo, SPEEDS: SPEEDS, WARP_SPEEDS: WARP_SPEEDS, isWarp: isWarp, yr: yr, LIFESPAN: LIFESPAN, WARP_SUPPLY: WARP_SUPPLY, CRYO: CRYO, isEarthLine: isEarthLine, causeLine: causeLine, seenHome: seenHome };
@@ -2424,7 +2700,9 @@ if (typeof module !== 'undefined') module.exports = SIM;
     }
     h += '<h1>' + (t.from === t.to ? '从冬眠中醒来 · ' : '抵达 · ') + esc(r.sysName) + '</h1>';
     h += '<div class="sub">' + t.label + ' · 船上 <span class="good">+' + f1(t.ship) + (t.bio < t.ship - 1e-6 ? '（冬眠，舰员只老了 ' + f1(t.bio) + '）' : '') + '</span> · 外部 <span class="warn">+' + f1(t.ext) + '</span> · 现在是宇宙' + SIM.yr(t.arrive) + '，舰员 ' + t.crewAge.toFixed(1) + ' 岁</div>';
-    h += (r.big || []).map(function (b) { return '<div class="bigcard ' + (b.cls === 'good' ? 'good' : '') + '"><div class="bt">' + esc(b.title) + '</div>' + esc(b.t) + '</div>'; }).join('');
+    h += endingHtml(r.ending);
+    h += (r.big || []).map(function (b) { return '<div class="bigcard ' + (b.cls === 'good' ? 'good' : '') + '"' + (b.major ? ' style="border-width:2px;font-size:15px"' : '') + '><div class="bt">' + esc(b.title) + '</div>' + esc(b.t) + '</div>'; }).join('');
+    if ((r.bigFolded || []).length) h += '<p class="dim" style="font-size:12px" title="' + esc(r.bigFolded.map(function (b) { return b.title + '：' + b.t; }).join('\n')) + '">另有 ' + r.bigFolded.length + ' 件远方的事已记入史册：' + esc(r.bigFolded.map(function (b) { return b.title; }).join('；')) + '</p>';
     h += (r.notes || []).map(function (n) { return '<p class="' + n.cls + '" style="font-size:13px">' + esc(n.t) + '</p>'; }).join('');
     if (r.first) {
       h += '<div class="cmp"><div class="now"><h3>第一次来到这里</h3><div class="civ">' + esc(SIM.lifeLine(r.now)) + '</div></div></div>';
@@ -2442,6 +2720,7 @@ if (typeof module !== 'undefined') module.exports = SIM;
     var cz = (r.caused || []).filter(function (x) { return !lineT[x]; });
     if (cz.length) h += '<div class="echo"><b>你留下的回响</b>（你的选择在这些年里造成的后果）<br>' + cz.slice(0, 6).map(function (x) { return '· ' + esc(x); }).join('<br>') + (cz.length > 6 ? '<br><span class="dim">……还有 ' + (cz.length - 6) + ' 条</span>' : '') + '</div>';
     if (r.goals && r.goals.length) h += '<div class="goalbox"><b>旅程里程碑</b>：' + r.goals.map(esc).join('；') + '</div>';
+    if (r.destiny && r.destiny.state === 'active') h += '<div class="goalbox"><b>命运 · ' + esc(r.destiny.title) + '</b>：' + esc(r.destiny.goal) + (r.destiny.progress ? '<br><span class="dim">' + esc(r.destiny.progress) + '</span>' : '') + '</div>';
     if (r.cosmic && r.cosmic.length) h += '<div class="cosmic"><b>宇宙尺度的消息</b>（宇宙维度 ' + r.dim.toFixed(3) + '，累计降维打击 ' + r.dimStrikes + ' 次）<br>' + r.cosmic.map(function (x) { return '· ' + SIM.yr(x.y) + '：' + esc(x.t); }).join('<br>') + '</div>';
     if (u.ship.dead) h += '<div class="deadbox"><b>旅程终结</b><br>' + esc(u.ship.dead.cause) + '<br><span class="dim">按「重开」或「换一个宇宙」再来一次。</span></div>';
     if (r.remote.length) h += '<div class="remote"><b>你去过的其他地方</b>（只能看到光已经传到这里的消息）<br>' + r.remote.map(function (x) { return '· <b>' + esc(x.name) + '</b>：' + esc(x.t); }).join('<br>') + '</div>';
@@ -2462,12 +2741,16 @@ if (typeof module !== 'undefined') module.exports = SIM;
         var res2 = SIM.interact(u, r.sysId, k);
         var cv2 = u.systems[r.sysId].owner != null ? u.civs[u.systems[r.sysId].owner] : null;
         var remembers = cv2 && cv2.alive && !u.ship.dead && ['观察', '凝视', '考古', '拾荒'].indexOf(k) < 0;
-        $('actRes').innerHTML = '<p class="' + res2.cls + '">' + esc(res2.t) + '</p>' + (u.ship.dead ? '<div class="deadbox"><b>旅程终结</b><br>' + esc(u.ship.dead.cause) + '</div>' : remembers ? '<p class="dim">他们会记住你。几百年后回来，看看这份记忆变成了什么。</p>' : '');
+        $('actRes').innerHTML = '<p class="' + res2.cls + '">' + esc(res2.t) + '</p>' + endingHtml(res2.ending) + (u.ship.dead ? '<div class="deadbox"><b>旅程终结</b><br>' + esc(u.ship.dead.cause) + '</div>' : remembers ? '<p class="dim">他们会记住你。几百年后回来，看看这份记忆变成了什么。</p>' : '');
         $('acts').innerHTML = '<button id="closeM">关闭</button>'; $('closeM').onclick = closeModal;
         render();
       };
     });
     render();
+  }
+  function endingHtml(en) {
+    if (!en) return '';
+    return '<div class="bigcard ' + (en.state === 'won' ? 'good' : '') + '" style="border-width:2px"><div class="bt">' + esc(en.head) + '</div>' + esc(en.text) + '<br><span class="dim" style="font-size:12px">' + esc(en.share) + '</span></div>';
   }
   function closeModal() { $('modal').style.display = 'none'; render(); }
 
@@ -2486,8 +2769,8 @@ if (typeof module !== 'undefined') module.exports = SIM;
     '<b>航行</b>：没有任何东西能超光速，外部时间永远 ≥ 距离 / c。常规推进上限 0.03c，船上时间 ≈ 外部时间，舰员要冬眠；曲率驱动是唯一能接近光速的方式（0.999c~0.99999c，几乎瞬间加速），船上时间 = 外部时间 / γ，极短，但会留下暴露坐标的曲率航迹。',
     '<b>接触</b>：你的飞船有自己的科技等级（起始 60，比母星超前），靠求教、交换、贸易、考古、拾荒、送信、展出和回母星补课成长。抵达时按「对方科技 − 飞船科技」分层：原始（只能观察或降临）、落后（可留下少量/大量技术、假扮神明）、对等（交换技术、贸易、结盟、对峙）、先进（按对方性格：学者研究你、官僚检疫后发通行证、收藏家想展出飞船、商人雇你送信、冷漠的无视你、好战的盘查；敌视你的会扣押。母星坐标只会被同一个文明抽取一次，有效通行证免检）。地球一脉的文明永远欢迎你回家。废墟可以考古，并查明他们是怎么消失的。',
     '<b>回响</b>：你的干预会在之后几百年里发酵——以你命名的宗教和分裂、追溯到你的科技史、以你命名的飞船、来报恩或复仇的后代舰队。回访时它们会出现在「你留下的回响」里。',
-    '<b>代价</b>：补给起始 100，曲率航行每次消耗 4 + 距离/50，冬眠和常规航行每 100 年消耗约 1；补给低于 4 无法启动曲率引擎。可在母星、友好文明、贸易、拾荒、考古处补充。舰员活到 105 岁旅程就结束；长眠还有事故风险。',
-    '<b>可选目标</b>：找到歌者的签名；看着地球文明活过纪元 3000 年；听到归零者的广播。',
+    '<b>代价</b>：补给起始 100，曲率航行每次消耗 4 + 距离/25（0.9999c 再 +2，0.99999c 再 +4），常规航行每 100 年消耗 1，冬眠每 100 年 2.5；补给低于 4 无法启动曲率引擎。只有太阳的母星本体能补满并送科技（150 年一次），殖民地只给一点；友好文明、贸易、拾荒、考古（越先进的废墟越值钱也越危险）都能补充。舰员活到 105 岁旅程就结束；长眠还有事故风险。',
+    '<b>命运</b>（可在下方选择，开局或中途都行）：等到归零者的广播 / 找到歌者（两段签名）/ 让地球活到纪元 3000 年 / 加入黑域。达成或落空都会给出结局。',
     '<b>黑暗森林</b>：每个星系有暴露度（0~10），来自无线电泄漏、曲率航迹、坐标广播和被抽取的坐标。所有打击都有飞行时间：普通星海文明（科技 ≥75）用光粒；看到附近打击闪光的文明会静默，科技 ≥100 的可能把自己封进黑域（光速 16.7 km/s，绝对安全但永远出不来）。你也可以向全宇宙广播某处坐标，用来威慑或复仇。',
     '<b>歌者 / 神级文明</b>：在星图之外巡航的清理者（科技 150），不能接触。暴露度 ≥1 的坐标以光速传到它那里后，它会随手决定是否清理，再把光粒或二向箔扔回来（往返都要按距离算时间）。曲率航迹和通讯是格外显眼的人造信号，即使没到阈值也可能被注意，但它们会随时间淡去（航迹约 45 年减半）；常规推进、只观察不接触几乎不留痕迹。抵达报告会写明每次打击的因果链。',
     '<b>二向箔</b>：命中点周围的三维空间以光速跌落成二维，半径扩到 10~22 光年后停止，被吞没的星系永远变成一幅画。星海文明能提前发现并派流亡舰队逃走。飞船停在里面会被压平；从受威胁的星系出发，只有曲率驱动能跑赢光速扩张的前沿。',
@@ -2510,6 +2793,7 @@ if (typeof module !== 'undefined') module.exports = SIM;
     var last = null, steps = plan.split(',');
     steps.forEach(function (st, k) {
       var p3 = st.split(':');
+      if (p3[0] === 'd') { SIM.chooseDestiny(u, p3[1]); return; }   // d:zero / d:singer / d:earth / d:domain
       last = p3[0] === 'h' ? SIM.hibernate(u, +p3[1]) : SIM.travel(u, +p3[0], p3[1] || 'w0.9999');
       if (k < steps.length - 1 && p3[2]) SIM.interact(u, last.report.sysId, decodeURIComponent(p3[2]));
     });
