@@ -181,7 +181,7 @@
       if (tt < C.T_PULL0) return { pos: sr.pos, tgt: sr.tgt, up: sr.up, L: L0, F: V(0, 0, 0) };
       var L = Lof(tt), D = Math.pow(10, L);
       var d0 = sr.pos.clone().normalize(), w = U.smoothstep(0.25, 5.0, L);
-      var uEnd = C.U_END.clone().applyAxisAngle(V(0, 1, 0), Math.max(0, tt - C.T_PULL1) * 0.012);
+      var uEnd = C.U_END.clone().applyAxisAngle(V(0, 1, 0), -Math.max(0, tt - C.T_PULL1) * 0.016);
       var dir = d0.clone().lerp(V(0.75, 0.45, 0.5).normalize(), U.smoothstep(0.1, 1.8, L)).normalize().lerp(uEnd, U.smoothstep(2.6, 6.0, L)).normalize();
       var wG = U.smoothstep(11.5, 14.2, L), wS = U.smoothstep(3.6, 5.6, L);
       var F = V(0, 0, 0).lerp(C.SUN_POS, wS).lerp(C.GAL_C, wG);

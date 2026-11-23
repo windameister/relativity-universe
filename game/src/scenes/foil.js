@@ -10,28 +10,28 @@
  */
 (function () {
   var RU = window.RU, T = window.THREE, U = RU.util;
-  var PY = -10, N = new T.Vector3(0, 1, 0), T0 = new T.Vector3(150, PY, 0);
+  var PY = -18, N = new T.Vector3(0, 1, 0), T0 = new T.Vector3(168, PY, 0);
   var T_TOUCH = 7.0, T_END = 63;
 
-  // ---------- 天体布局（a: 轨道半径，ang: 方位角°，r: 视觉半径，tA: 前沿到达时刻，dur: 跌落时长，k: 展开速度） ----------
+  // ---------- 天体布局（按太阳系真实层级大幅拉开太阳与行星比例：太阳 14 >> 木星 3.3 / 土星 2.8 >> 冰巨星 1.5 >> 地球 0.8） ----------
   var BODIES = [
-    { k: 'neptune', a: 88, ang: 10, r: 2.2, tA: 11.6, dur: 4.2, ks: 0.14, au: 9.5, tilt: 0.4 },
-    { k: 'uranus', a: 76, ang: -25, r: 2.1, tA: 15.6, dur: 3.6, ks: 0.12, au: 18, tilt: 0.25 },
-    { k: 'saturn', a: 62, ang: 30, r: 3.4, tA: 19.6, dur: 4.2, ks: 0.13, au: 27, tilt: 0.12 },
-    { k: 'jupiter', a: 46, ang: -15, r: 4.2, tA: 24.6, dur: 4.6, ks: 0.13, au: 33, tilt: 0.05 },
-    { k: 'mars', a: 30, ang: 40, r: 0.75, tA: 28.4, dur: 2.6, ks: 0.2, au: 37.5 },
-    { k: 'sun', a: 0, ang: 0, r: 4.0, tA: 31.6, dur: 4.4, ks: 0.0, au: 39.5 },
-    { k: 'mercury', a: 11, ang: 120, r: 0.45, dur: 2.2, ks: 0.08 },
-    { k: 'venus', a: 16, ang: 150, r: 0.9, dur: 2.6, ks: 0.08 },
-    { k: 'moon', a: 0, ang: 0, r: 0.3, dur: 3.2, ks: 0.12, moon: true },
-    { k: 'earth', a: 22, ang: 175, r: 1.0, tA: 44.4, dur: 6.3, ks: 0.3, au: 40.6, tilt: 0.0 }
+    { k: 'neptune', a: 104, ang: 10, r: 1.45, tA: 11.6, dur: 4.2, ks: 0.14, au: 9.5, tilt: 0.4 },
+    { k: 'uranus', a: 90, ang: -25, r: 1.5, tA: 15.6, dur: 3.6, ks: 0.12, au: 18, tilt: 0.25 },
+    { k: 'saturn', a: 74, ang: 30, r: 2.8, tA: 19.6, dur: 4.2, ks: 0.13, au: 27, tilt: 0.12 },
+    { k: 'jupiter', a: 56, ang: -15, r: 3.3, tA: 24.6, dur: 4.6, ks: 0.13, au: 33, tilt: 0.05 },
+    { k: 'mars', a: 41, ang: 40, r: 0.55, tA: 28.4, dur: 2.6, ks: 0.2, au: 37.5 },
+    { k: 'sun', a: 0, ang: 0, r: 14.0, tA: 31.6, dur: 4.8, ks: 0.0, au: 39.5 },
+    { k: 'mercury', a: 20, ang: 120, r: 0.38, dur: 2.2, ks: 0.08 },
+    { k: 'venus', a: 26, ang: 150, r: 0.75, dur: 2.6, ks: 0.08 },
+    { k: 'moon', a: 0, ang: 0, r: 0.22, dur: 3.2, ks: 0.12, moon: true },
+    { k: 'earth', a: 34, ang: 175, r: 0.80, tA: 44.4, dur: 6.3, ks: 0.28, au: 40.6, tilt: 0.0 }
   ];
   BODIES.forEach(function (b) {
     var a = b.ang * Math.PI / 180;
     b.pos = new T.Vector3(b.a * Math.cos(a), 0, b.a * Math.sin(a));
   });
   var EARTH = BODIES[9], MOON = BODIES[8], SUN = BODIES[5];
-  MOON.pos.copy(EARTH.pos).add(new T.Vector3(2.7, -2.6, -1.6));
+  MOON.pos.copy(EARTH.pos).add(new T.Vector3(2.1, -1.8, -1.2));
   BODIES.forEach(function (b) { b.d = Math.hypot(b.pos.x - T0.x, b.pos.z - T0.z); });
 
   // 前沿半径 Rw(t)：经过各「关键天体」的 (tA, d - r) 关键帧，分段线性（纯函数）
@@ -312,13 +312,13 @@
       } },
       { t0: 30.4, t1: 37.8, label: '', cam: function (t) {
         var k = U.ease.sine(U.seg(t, 30.4, 37.8));
-        return { pos: lerpV(V(-30, 5, -15), V(-46, 26, -26), k), tgt: lerpV(V(2, -2, 0), V(8, PY, 2), k), fov: lerpV(V(46, 0, 0), V(60, 0, 0), k).x };
+        return { pos: lerpV(V(-62, 14, -32), V(-94, 48, -50), k), tgt: lerpV(V(2, -4, 0), V(8, PY, 2), k), fov: lerpV(V(48, 0, 0), V(60, 0, 0), k).x };
       } },
       { t0: 37.8, t1: 50.6, label: '地表视角', ground: true, cam: function (t) { return earthCam(t); } },
       { t0: 50.6, t1: T_END + 10, label: '', cam: function (t) {
         var b = EARTH, c = cpOf(b), k = U.ease.sine(U.seg(t, 50.6, T_END));
-        var off = lerpV(V(-6, 20, 15), V(-12, 34, 24), k);
-        return { pos: c.clone().add(off), tgt: c.clone().add(V(3, 0, -2)), fov: 46 };
+        var off = lerpV(V(-10, 22, 16), V(-24, 52, 36), k);
+        return { pos: c.clone().add(off), tgt: c.clone().lerp(V(0, PY, 0), 0.38), fov: 48 };
       } }
     ];
     function shotAt(t) { for (var i = 0; i < SHOTS.length; i++) if (t < SHOTS[i].t1) return SHOTS[i]; return SHOTS[SHOTS.length - 1]; }

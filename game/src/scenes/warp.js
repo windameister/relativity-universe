@@ -578,11 +578,11 @@
         else s = w.dVis - logLerp(w.b, w.eps1, U.ease.out(U.seg(tq, tl.c1, tl.d1)));
         if (w.caught && tq > tl.sw1) s = w.a + (w.sHit - w.a) * U.seg(tq, tl.sw1, tHit);
         st.s = s;
-        // 镜头：先回望出发的恒星，曲率启动后转身向前
-        var sw = easeIO(U.seg(t, tl.sw0, tl.sw1));
-        st.phi = U.lerp(Math.PI - 0.32 + 0.03 * Math.sin(t * 0.4), 0.0, sw) + 0.015 * Math.sin(t * 0.23) * sw;
-        st.pitch = U.lerp(0.06, 0.0, sw) - 0.13 * easeIO(U.seg(t, tl.d1 - 0.6, tl.card + 0.8));   // 抵达：目的地星升到字幕上方
-        st.fov = U.lerp(58, 72, easeIO(U.seg(t, tl.eng, tl.sw1))) - 8 * easeIO(U.seg(t, tl.c1, tl.d1));
+        // 镜头：始终朝向前方目的地，曲率启动时仅做轻微航向对准与广角推力，不做 180° 大转身
+        var sw = easeIO(U.seg(t, tl.eng, tl.sw1));
+        st.phi = U.lerp(0.16, 0.0, sw) + 0.014 * Math.sin(t * 0.23);
+        st.pitch = U.lerp(0.04, 0.0, sw) - 0.13 * easeIO(U.seg(t, tl.d1 - 0.6, tl.card + 0.8));   // 抵达：目的地星升到字幕上方
+        st.fov = U.lerp(58, 74, easeIO(U.seg(t, tl.eng, tl.sw1))) - 10 * easeIO(U.seg(t, tl.c1, tl.d1));
         st.shake = 0.006 * Math.exp(-Math.max(0, t - tl.eng) * 2.2) * (t > tl.eng ? 1 : 0) + 0.0012 * U.seg(t, tl.a0, tl.a1) * (1 - U.seg(t, tl.c1, tl.d1));
         st.trail = U.smoothstep(tl.eng, tl.eng + 0.7, t);
         st.ripple = U.seg(t, tl.eng, tl.eng + 1.6); st.rippleA = t > tl.eng ? Math.sin(Math.PI * st.ripple) : 0;
@@ -677,9 +677,9 @@
       var w = W, tl = w.tl, c = '';
       function win(a, b) { return t >= a && t < b; }
       if (w.warp) {
-        if (win(0.4, tl.eng)) c = '回望' + w.fromS.name;
-        else if (win(tl.eng, tl.eng + 2.0)) c = '曲率驱动启动 —— 船尾的空间被抹平';
-        else if (win(tl.eng + 2.1, tl.sw1 - 0.2)) c = '身后的星光红移、变暗，直至消失';
+        if (win(0.4, tl.eng)) c = '锁定航向 · ' + w.toS.name;
+        else if (win(tl.eng, tl.eng + 2.0)) c = '曲率驱动启动 —— 空间向前折叠';
+        else if (win(tl.eng + 2.1, tl.sw1 - 0.2)) c = '速度逼近光速，前方星光蓝移暴亮';
         else if (win(tl.sw1, tl.sw1 + 2.4) && !(w.caught && t > tl.hit)) c = '整片星空向前方聚拢';
         else if (!w.caught && win(tl.c1 + 0.1, tl.d1)) c = '减速 —— 星星回到原来的位置';
       } else {
